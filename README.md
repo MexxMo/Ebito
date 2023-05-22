@@ -1,4 +1,4 @@
-<image src="https://disk.yandex.ru/client/disk?source=main-loginmenu&idApp=client&dialog=slider&idDialog=%2Fdisk%2Fphoto_5429522245300111540_m.jpg" alt="logo.png">
+<image src="https://disk.yandex.ru/i/Is0dYut-bAtl4w" alt="logo.png">
 
 # Информация
 
