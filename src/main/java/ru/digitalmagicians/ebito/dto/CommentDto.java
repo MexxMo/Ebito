@@ -3,7 +3,7 @@ package ru.digitalmagicians.ebito.dto;
 import lombok.Data;
 
 @Data
-public class Comment {
+public class CommentDto {
     private Integer pk;
     private String text;
     private Integer author;
