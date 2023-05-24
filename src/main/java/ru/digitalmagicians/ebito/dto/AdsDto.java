@@ -3,10 +3,10 @@ package ru.digitalmagicians.ebito.dto;
 import lombok.Data;
 
 @Data
-public class Ads {
-    private int pk;
-    private int author;
+public class AdsDto {
+    private Integer pk;
+    private Integer author;
     private String image;
-    private int price;
+    private Integer price;
     private String title;
 }

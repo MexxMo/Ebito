@@ -3,11 +3,11 @@ package ru.digitalmagicians.ebito.dto;
 import lombok.Data;
 
 @Data
-public class Comment {
-    private int pk;
+public class CommentDto {
+    private Integer pk;
     private String text;
-    private int author;
+    private Integer author;
     private String authorImage;
     private String authorFirstName;
-    private int createdAt;
+    private Integer createdAt;
 }
