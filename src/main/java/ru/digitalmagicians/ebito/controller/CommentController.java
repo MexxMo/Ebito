@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.digitalmagicians.ebito.dto.CommentDto;
+import ru.digitalmagicians.ebito.dto.CreateCommentDto;
 import ru.digitalmagicians.ebito.dto.ResponseWrapperCommentDto;
 
 @CrossOrigin(value = "http://localhost:3000")
@@ -56,10 +57,10 @@ public class CommentController {
     )
     @PostMapping("/{id}/comments")
     public ResponseEntity<CommentDto> addComment(@PathVariable("id") Integer id,
-                                                 @RequestBody CommentDto commentDto) {
+                                                 @RequestBody CreateCommentDto createCommentDto) {
 
 
-        return ResponseEntity.ok(commentDto);
+        return ResponseEntity.ok(new CommentDto());
     }
 
     @Operation(
