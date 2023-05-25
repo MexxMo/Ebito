@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,9 +39,10 @@ public class AdsController {
                     @ApiResponse(responseCode = "401", description = "Unauthorized")
             }
     )
-    @PostMapping("/")
-    public ResponseEntity<AdsDto> setAds(@RequestBody AdsDto adsDto) {
-        return ResponseEntity.ok(adsDto);
+    @PostMapping(value = "/", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<AdsDto> setAds(@RequestPart("image") MultipartFile image,
+                                         @RequestPart("properties") CreateAdsDto properties) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(new AdsDto());
     }
 
     @Operation(

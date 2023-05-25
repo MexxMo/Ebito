@@ -28,7 +28,7 @@ public class UserController {
     )
     @PostMapping("set_password")
     public ResponseEntity<NewPasswordDto> setPassword(@RequestBody NewPasswordDto newPassword) {
-        return ResponseEntity.ok(newPassword);
+        return ResponseEntity.ok().build();
     }
 
     @Operation(
