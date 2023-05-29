@@ -1,47 +1,52 @@
 package ru.digitalmagicians.ebito.service.impl;
 
-import org.springframework.security.core.userdetails.User;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import ru.digitalmagicians.ebito.Security.EbitoUserDetailsService;
 import ru.digitalmagicians.ebito.dto.RegisterReq;
 import ru.digitalmagicians.ebito.dto.Role;
+import ru.digitalmagicians.ebito.exception.UserAlreadyExistException;
+import ru.digitalmagicians.ebito.exception.UserNotFoundException;
 import ru.digitalmagicians.ebito.service.AuthService;
 
+@Slf4j
 @Service
+@RequiredArgsConstructor
+@Transactional
 public class AuthServiceImpl implements AuthService {
 
-  private final UserDetailsManager manager;
+  private final EbitoUserDetailsService manager;
 
   private final PasswordEncoder encoder;
 
-  public AuthServiceImpl(UserDetailsManager manager, PasswordEncoder passwordEncoder) {
-    this.manager = manager;
-    this.encoder = passwordEncoder;
-  }
-
   @Override
   public boolean login(String userName, String password) {
-    if (!manager.userExists(userName)) {
+    try {
+      UserDetails userDetails = manager.loadUserByUsername(userName);
+      return encoder.matches(password, userDetails.getPassword());
+    } catch (UserNotFoundException e) {
+      log.error(e.getMessage());
       return false;
     }
-    UserDetails userDetails = manager.loadUserByUsername(userName);
-    return encoder.matches(password, userDetails.getPassword());
   }
 
   @Override
   public boolean register(RegisterReq registerReq, Role role) {
-    if (manager.userExists(registerReq.getUsername())) {
-      return false;
+    if (registerReq.getUsername().isBlank() || registerReq.getFirstName().isBlank()
+            || registerReq.getLastName().isBlank() || registerReq.getPhone().isBlank()
+            || registerReq.getPassword().isBlank()) {
+      throw new IllegalArgumentException("All fields must be filled");
     }
-    manager.createUser(
-        User.builder()
-            .passwordEncoder(this.encoder::encode)
-            .password(registerReq.getPassword())
-            .username(registerReq.getUsername())
-            .roles(role.name())
-            .build());
+    try {
+      manager.createUser(registerReq);
+    } catch (UserAlreadyExistException e) {
+      log.error(e.getMessage());
+    }
+    log.info("User {} successfully created", registerReq.getUsername());
     return true;
   }
 }
