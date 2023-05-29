@@ -1,4 +1,4 @@
-package ru.digitalmagicians.ebito.Security;
+package ru.digitalmagicians.ebito.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

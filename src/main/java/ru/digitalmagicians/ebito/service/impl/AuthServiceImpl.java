@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.digitalmagicians.ebito.Security.EbitoUserDetailsService;
+import ru.digitalmagicians.ebito.security.EbitoUserDetailsService;
 import ru.digitalmagicians.ebito.dto.RegisterReq;
 import ru.digitalmagicians.ebito.dto.Role;
 import ru.digitalmagicians.ebito.exception.UserAlreadyExistException;

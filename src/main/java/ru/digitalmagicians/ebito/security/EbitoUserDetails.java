@@ -1,4 +1,4 @@
-package ru.digitalmagicians.ebito.Security;
+package ru.digitalmagicians.ebito.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;

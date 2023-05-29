@@ -1,4 +1,4 @@
-package ru.digitalmagicians.ebito.Security;
+package ru.digitalmagicians.ebito.security;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
