@@ -57,17 +57,10 @@ public class CommentController {
     )
     @PostMapping("/{id}/comments")
     public ResponseEntity<CommentDto> addComment(@PathVariable("id") Integer id,
-<<<<<<< HEAD
-                                                 @RequestBody CommentDto commentDto) {
-
-
-        return ResponseEntity.ok(commentDto);
-=======
                                                  @RequestBody CreateCommentDto createCommentDto) {
 
 
         return ResponseEntity.ok(new CommentDto());
->>>>>>> origin/feature-catunderglue
     }
 
     @Operation(
@@ -102,8 +95,8 @@ public class CommentController {
     )
     @PatchMapping("/{adId}/comments/{commentId}")
     public ResponseEntity<CommentDto> updateComment(@PathVariable("adId") Integer adId,
-                                           @PathVariable("commentId") Integer commentId,
-                                           @RequestBody CommentDto commentDto) {
+                                                    @PathVariable("commentId") Integer commentId,
+                                                    @RequestBody CommentDto commentDto) {
         return ResponseEntity.ok(commentDto);
     }
 
