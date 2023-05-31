@@ -14,7 +14,7 @@ public interface CommentMapper {
 
     @Mapping(target = "author", source = "author.id")
     @Mapping(target = "authorFirstName", source = "author.firstName")
-    @Mapping(target = "authorImage", source = "author.image", qualifiedByName = "imageMapping")
+//    @Mapping(target = "authorImage", source = "author.image", qualifiedByName = "imageMapping")
     @Mapping(target = "pk", source = "id")
     @Mapping(target = "createdAt", source = "createdAt")
     @Mapping(target = "text", source = "text")

@@ -66,7 +66,7 @@ public class CommentController {
                                                  Authentication authentication) {
 
 
-        return ResponseEntity.ok(commentService.addComment(id,createCommentDto,authentication));
+        return ResponseEntity.ok(commentService.addComment(id, createCommentDto, authentication));
     }
 
     @Operation(
@@ -79,9 +79,9 @@ public class CommentController {
     )
     @DeleteMapping("/{adId}/comments/{commentId}")
     public ResponseEntity<?> deleteComment(@PathVariable("adId") Integer adId,
-                                        @PathVariable("commentId") Integer commentId) {
+                                           @PathVariable("commentId") Integer commentId) {
 
-        commentService.deleteComment(adId,commentId);
+        commentService.deleteComment(adId, commentId);
         return ResponseEntity.ok().build();
     }
 

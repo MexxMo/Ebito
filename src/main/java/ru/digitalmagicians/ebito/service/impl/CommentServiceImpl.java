@@ -1,5 +1,6 @@
 package ru.digitalmagicians.ebito.service.impl;
 
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -21,11 +22,10 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+
 public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
-    private AdsService adsService;
-    private CommentDto commentDto;
-    private final UserService userService;
+    private final AdsService adsService;
 
 
     @Override
@@ -39,7 +39,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public CommentDto addComment(Integer id, CreateCommentDto createCommentDto, Authentication authentication) {
 
-        if (commentDto.getText() == null || commentDto.getText().isBlank()) {
+        if (createCommentDto.getText() == null || createCommentDto.getText().isBlank()) {
             throw new IncorrectArgumentException();
         }
 
@@ -49,7 +49,7 @@ public class CommentServiceImpl implements CommentService {
         comment.setAuthor(user);
         comment.setAds(adsService.findAdsById(id));
         comment.setCreatedAt(System.currentTimeMillis());
-        comment.setText(commentDto.getText());
+        comment.setText(createCommentDto.getText());
         commentRepository.save(comment);
         log.info("Comment added id: {}", id);
         return CommentMapper.INSTANCE.commentToDto(comment);
