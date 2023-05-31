@@ -13,6 +13,7 @@ import ru.digitalmagicians.ebito.mapper.CommentMapper;
 import ru.digitalmagicians.ebito.repository.CommentRepository;
 import ru.digitalmagicians.ebito.service.AdsService;
 import ru.digitalmagicians.ebito.service.CommentService;
+import ru.digitalmagicians.ebito.service.UserService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,7 +24,8 @@ import java.util.stream.Collectors;
 public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private AdsService adsService;
-    private  CommentDto commentDto;
+    private CommentDto commentDto;
+    private final UserService userService;
 
 
     @Override
@@ -37,17 +39,20 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public CommentDto addComment(Integer id, CreateCommentDto createCommentDto, Authentication authentication) {
 
-        if(commentDto.getText() == null || commentDto.getText().isBlank()) throw new IncorrectArgumentException();
+        if (commentDto.getText() == null || commentDto.getText().isBlank()) {
+            throw new IncorrectArgumentException();
+        }
 
         Comment comment = new Comment();
         User user = (User) authentication.getPrincipal();
 
         comment.setAuthor(user);
-        comment.setText(commentDto.getText());
-        comment.setAds(adsService.getById(id.longValue()));
+        comment.setAds(adsService.findAdsById(id));
         comment.setCreatedAt(System.currentTimeMillis());
+        comment.setText(commentDto.getText());
         commentRepository.save(comment);
-        return CommentMapper.INSTANCE.INSTANCE.commentToDto(comment);
+        log.info("Comment added id: {}", id);
+        return CommentMapper.INSTANCE.commentToDto(comment);
     }
 
     @Override
@@ -59,18 +64,21 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public CommentDto updateComments(Integer adId, Integer commentId,
-                                        CommentDto adsCommentDto) {
+                                     CommentDto adsCommentDto) {
 
-        if(adsCommentDto.getText() == null || adsCommentDto.getText().isBlank()) throw new IncorrectArgumentException();
+        if (adsCommentDto.getText() == null || adsCommentDto.getText().isBlank())
+            throw new IncorrectArgumentException();
 
-        Comment adsComment = getComment(commentId, adId);
+        Comment adsComment = getComment(adId, commentId);
         adsComment.setText(adsCommentDto.getText());
         commentRepository.save(adsComment);
+        log.info("Comment update successfully");
         return CommentMapper.INSTANCE.commentToDto(adsComment);
+
     }
 
-    public Comment getComment(Integer commentId, Integer adId) {
-        return commentRepository.findByIdAndAdsId(commentId, adId).orElseThrow(CommentNotFoundException::new);
+    public Comment getComment(Integer adId, Integer commentId) {
+        return commentRepository.findByIdAndAdsId(adId, commentId).orElseThrow(CommentNotFoundException::new);
     }
 
     @Override
