@@ -4,22 +4,23 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.digitalmagicians.ebito.dto.AdsDto;
 import ru.digitalmagicians.ebito.dto.CreateAdsDto;
 import ru.digitalmagicians.ebito.dto.FullAdsDto;
+import ru.digitalmagicians.ebito.dto.ResponseWrapperAdsDto;
 
-import java.util.List;
+
 
 
 public interface AdsService {
-    void createAds(MultipartFile image, CreateAdsDto properties,Authentication authentication);
+    AdsDto createAds(MultipartFile image, CreateAdsDto properties,Authentication authentication);
 
    CreateAdsDto updateAds(Long id, CreateAdsDto adsDto);
 
    void updateAdsImage(Long id, MultipartFile image);
 
-   List<AdsDto> getAll();
+    ResponseWrapperAdsDto getAll();
 
-   List<AdsDto> getAllByMe(Authentication authentication);
+    ResponseWrapperAdsDto getAllByMe(Authentication authentication);
 
     FullAdsDto getById(Long id);
 
-   void delete();
+   void delete(Long id);
 }

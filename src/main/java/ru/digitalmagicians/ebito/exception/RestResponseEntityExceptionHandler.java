@@ -27,4 +27,10 @@ public class RestResponseEntityExceptionHandler {
                 .badRequest()
                 .body(exception.getMessage());
     }
+    @ExceptionHandler(AdsValidationException.class)
+    public ResponseEntity<String> handleAdsValidationException(AdsValidationException exception) {
+        return ResponseEntity
+                .badRequest()
+                .body(exception.getMessage());
+    }
 }
