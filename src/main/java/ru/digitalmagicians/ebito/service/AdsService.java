@@ -6,7 +6,7 @@ import ru.digitalmagicians.ebito.dto.CreateAdsDto;
 import ru.digitalmagicians.ebito.dto.FullAdsDto;
 import ru.digitalmagicians.ebito.dto.ResponseWrapperAdsDto;
 
-import java.util.List;
+
 
 
 public interface AdsService {
