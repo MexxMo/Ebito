@@ -74,10 +74,7 @@ public class AdsServiceImpl implements AdsService {
 
     }
 
-    /**
-     *
-     * @return
-     */
+
     @Override
     public ResponseWrapperAdsDto getAll() {
         log.info("Searching all ads");
