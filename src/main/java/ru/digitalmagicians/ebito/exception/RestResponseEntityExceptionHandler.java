@@ -1,5 +1,6 @@
 package ru.digitalmagicians.ebito.exception;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -32,5 +33,15 @@ public class RestResponseEntityExceptionHandler {
         return ResponseEntity
                 .badRequest()
                 .body(exception.getMessage());
+    }
+
+    @ExceptionHandler(CommentNotFoundException.class)
+    public ResponseEntity<?> handleNotFoundCommentException() {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+
+    @ExceptionHandler(IncorrectArgumentException.class)
+    public ResponseEntity<?> handleIncorrectArgumentException() {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 }
