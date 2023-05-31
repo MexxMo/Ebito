@@ -10,7 +10,7 @@ import ru.digitalmagicians.ebito.entity.Comment;
 public interface CommentMapper {
 
 
-    CommentMapper INSTANSE = Mappers.getMapper(CommentMapper.class);
+    CommentMapper INSTANCE = Mappers.getMapper(CommentMapper.class);
 
     @Mapping(target = "author", source = "author.id")
     @Mapping(target = "authorFirstName", source = "author.firstName")
@@ -18,6 +18,6 @@ public interface CommentMapper {
     @Mapping(target = "pk", source = "id")
     @Mapping(target = "createdAt", source = "createdAt")
     @Mapping(target = "text", source = "text")
-    CommentDto toDto(Comment entity);
+    CommentDto commentToDto(Comment entity);
 }
 
