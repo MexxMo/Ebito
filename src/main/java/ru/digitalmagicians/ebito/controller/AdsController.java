@@ -5,27 +5,24 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.digitalmagicians.ebito.dto.AdsDto;
 import ru.digitalmagicians.ebito.dto.CreateAdsDto;
 import ru.digitalmagicians.ebito.dto.FullAdsDto;
 import ru.digitalmagicians.ebito.dto.ResponseWrapperAdsDto;
-import ru.digitalmagicians.ebito.service.AdsService;
 
+
+import java.util.List;
 
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequestMapping("/ads")
 @Tag(name = "Объявления")
-@RequiredArgsConstructor
 public class AdsController {
-    private final AdsService adsService;
 
     @Operation(
             summary = "Добавить объявления",
@@ -42,11 +39,10 @@ public class AdsController {
                     @ApiResponse(responseCode = "401", description = "Unauthorized")
             }
     )
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<AdsDto> setAds(@RequestPart("image") MultipartFile image,
-                                         @RequestPart("properties") CreateAdsDto properties, Authentication authentication) {
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(adsService.createAds(image, properties,authentication));
+                                         @RequestPart("properties") CreateAdsDto properties) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(new AdsDto());
     }
 
     @Operation(
@@ -65,8 +61,8 @@ public class AdsController {
             }
     )
     @PatchMapping("/{id}")
-    public ResponseEntity<CreateAdsDto> updateAds(@PathVariable("id") Integer id, @RequestBody CreateAdsDto adsDto) {
-        return ResponseEntity.ok(adsService.updateAds(id, adsDto));
+    public ResponseEntity<CreateAdsDto> updateAds(@PathVariable("id") Long id, @RequestBody CreateAdsDto adsDto) {
+        return ResponseEntity.ok(adsDto);
     }
 
     @Operation(
@@ -102,9 +98,9 @@ public class AdsController {
                     )
             }
     )
-    @GetMapping()
-    public ResponseEntity<ResponseWrapperAdsDto> getAll() {
-        return ResponseEntity.ok(adsService.getAll());
+    @GetMapping("/")
+    public ResponseEntity<List<ResponseWrapperAdsDto>> getAll() {
+        return ResponseEntity.ok(List.of(new ResponseWrapperAdsDto()));
     }
 
     @Operation(
@@ -123,10 +119,9 @@ public class AdsController {
             }
     )
     @GetMapping("me")
-    public ResponseEntity<ResponseWrapperAdsDto> getMe(Authentication authentication) {
+    public ResponseEntity<ResponseWrapperAdsDto> getMe() {
 
-        return ResponseEntity.ok(adsService.getAllByMe(authentication));
-
+        return ResponseEntity.ok(new ResponseWrapperAdsDto());
     }
 
     @Operation(
@@ -145,9 +140,9 @@ public class AdsController {
             }
     )
     @GetMapping("/{id}")
-    public ResponseEntity<FullAdsDto> getAdsById(@PathVariable("id") Integer id) {
+    public ResponseEntity<FullAdsDto> getAdsById(@PathVariable("id") Long id) {
 
-        return ResponseEntity.ok(adsService.getById(id));
+        return ResponseEntity.ok(new FullAdsDto());
     }
 
     @Operation(
@@ -159,8 +154,7 @@ public class AdsController {
             }
     )
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteAds(@PathVariable("id") Integer id) {
-        adsService.delete(id);
+    public ResponseEntity<Void> deleteAds(@PathVariable("id") Long id) {
         return ResponseEntity.ok().build();
     }
 

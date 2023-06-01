@@ -5,24 +5,18 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.digitalmagicians.ebito.dto.NewPasswordDto;
 import ru.digitalmagicians.ebito.dto.UserDto;
-import ru.digitalmagicians.ebito.service.UserService;
 
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
-@RequiredArgsConstructor
-@RequestMapping("users")
+@RequestMapping("/users")
 @Tag(name = "Пользователи")
 public class UserController {
-
-    private final UserService userService;
 
     @Operation(
             summary = "Обновление пароля",
@@ -33,9 +27,7 @@ public class UserController {
             }
     )
     @PostMapping("set_password")
-    public ResponseEntity<NewPasswordDto> setPassword(@RequestBody NewPasswordDto newPassword,
-                                                      Authentication authentication) {
-        userService.setPassword(newPassword, authentication);
+    public ResponseEntity<NewPasswordDto> setPassword(@RequestBody NewPasswordDto newPassword) {
         return ResponseEntity.ok().build();
     }
 
@@ -55,8 +47,10 @@ public class UserController {
             }
     )
     @GetMapping("me")
-    public ResponseEntity<UserDto> getUser(Authentication authentication) {
-        return ResponseEntity.ok(userService.getUser(authentication));
+    public ResponseEntity<UserDto> getUser() {
+        UserDto user = new UserDto();
+        user.setId(1);
+        return ResponseEntity.ok(user);
     }
 
     @Operation(
@@ -75,8 +69,7 @@ public class UserController {
             }
     )
     @PatchMapping("me")
-    public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto, Authentication authentication) {
-        UserDto user = userService.updateUser(userDto, authentication);
+    public ResponseEntity<UserDto> updateUser(@RequestBody UserDto user) {
         return ResponseEntity.ok(user);
     }
 
@@ -88,11 +81,8 @@ public class UserController {
             }
     )
     @PatchMapping(value = "me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> updateUserImage(@RequestPart("image") MultipartFile image,
-                                                  Authentication authentication) {
-        userService.updateAvatar(image, authentication);
+    public ResponseEntity<String> updateUserImage(@RequestPart("image") MultipartFile image) {
         return ResponseEntity.ok().build();
     }
 
 }
-
