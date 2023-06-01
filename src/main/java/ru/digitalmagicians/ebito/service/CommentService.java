@@ -9,12 +9,12 @@ import java.util.List;
 
 public interface CommentService {
 
-    CommentDto addComment(Integer id, CreateCommentDto createCommentDto,
+    CommentDto addComment(Integer id, CommentDto commentDto,
                              Authentication authentication);
 
     void deleteComment(Integer adId, Integer commentId);
 
-    CommentDto updateComments(Integer adId, Integer commentId, CommentDto commentDto);
+    CommentDto updateComments(Integer adId, Integer commentId, CreateCommentDto createCommentDto);
 
     List<CommentDto> getComments(Integer id);
 
