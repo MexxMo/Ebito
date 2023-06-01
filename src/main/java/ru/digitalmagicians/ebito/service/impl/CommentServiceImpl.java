@@ -1,6 +1,5 @@
 package ru.digitalmagicians.ebito.service.impl;
 
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -14,7 +13,6 @@ import ru.digitalmagicians.ebito.mapper.CommentMapper;
 import ru.digitalmagicians.ebito.repository.CommentRepository;
 import ru.digitalmagicians.ebito.service.AdsService;
 import ru.digitalmagicians.ebito.service.CommentService;
-
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -81,9 +79,5 @@ public class CommentServiceImpl implements CommentService {
         return commentRepository.findByIdAndAdsId(adId, commentId).orElseThrow(CommentNotFoundException::new);
     }
 
-    @Override
-    public Comment getCommentById(Integer id) {
-        return commentRepository.findById(id).orElseThrow(CommentNotFoundException::new);
-    }
 
 }
