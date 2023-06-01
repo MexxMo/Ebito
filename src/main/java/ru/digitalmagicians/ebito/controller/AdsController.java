@@ -42,7 +42,7 @@ public class AdsController {
                     @ApiResponse(responseCode = "401", description = "Unauthorized")
             }
     )
-    @PostMapping(value = "/", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<AdsDto> setAds(@RequestPart("image") MultipartFile image,
                                          @RequestPart("properties") CreateAdsDto properties, Authentication authentication) {
 
@@ -102,7 +102,7 @@ public class AdsController {
                     )
             }
     )
-    @GetMapping("/")
+    @GetMapping()
     public ResponseEntity<ResponseWrapperAdsDto> getAll() {
         return ResponseEntity.ok(adsService.getAll());
     }

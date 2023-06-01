@@ -16,7 +16,6 @@ public interface AdsMapper {
 
     @Mapping(target = "pk", source = "id")
     @Mapping(target = "author", source = "author.id")
-
     AdsDto toDto(Ads ads);
 
     @Mapping(target = "authorFirstName", source = "author.firstName")
