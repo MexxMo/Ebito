@@ -53,7 +53,7 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public CreateAdsDto updateAds(Long id, CreateAdsDto createAds) {
+    public CreateAdsDto updateAds(Integer id, CreateAdsDto createAds) {
         if (validation(createAds)) {
             log.error("empty fields CreateAdsDto updateAds");
             throw new AdsValidationException("empty fields updateAds");
@@ -68,7 +68,7 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public void updateAdsImage(Long id, MultipartFile image) {
+    public void updateAdsImage(Integer id, MultipartFile image) {
         // todo
 
 
@@ -99,25 +99,25 @@ public class AdsServiceImpl implements AdsService {
 
 
     @Override
-    public FullAdsDto getById(Long id) {
+    public FullAdsDto getById(Integer id) {
         log.info("Searching ads by id: {}", id);
         return AdsMapper.INSTANCE.toFullAds(getAdsById(id));
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(Integer id) {
         Ads ads = getAdsById(id);
         adsRepository.delete(ads);
         log.info("Successful deleting ads by id: {}", id);
     }
 
-    private Ads getAdsById(Long id) {
+    private Ads getAdsById(Integer id) {
         log.info("Searching ads by id: {}", id);
         if (id == null) {
             log.error("Ads id is null");
             throw new IllegalArgumentException("Ads id is null");
         }
-        Optional<Ads> optionalAds = adsRepository.findById(id.intValue());
+        Optional<Ads> optionalAds = adsRepository.findById(id);
         if (optionalAds.isEmpty()) {
             log.error("Ads not found for id: {}", id);
             throw new AdsValidationException("Ads not found");

@@ -19,8 +19,6 @@ import ru.digitalmagicians.ebito.dto.ResponseWrapperAdsDto;
 import ru.digitalmagicians.ebito.service.AdsService;
 
 
-import java.util.List;
-
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequestMapping("/ads")
@@ -67,7 +65,7 @@ public class AdsController {
             }
     )
     @PatchMapping("/{id}")
-    public ResponseEntity<CreateAdsDto> updateAds(@PathVariable("id") Long id, @RequestBody CreateAdsDto adsDto) {
+    public ResponseEntity<CreateAdsDto> updateAds(@PathVariable("id") Integer id, @RequestBody CreateAdsDto adsDto) {
         return ResponseEntity.ok(adsService.updateAds(id, adsDto));
     }
 
@@ -147,7 +145,7 @@ public class AdsController {
             }
     )
     @GetMapping("/{id}")
-    public ResponseEntity<FullAdsDto> getAdsById(@PathVariable("id") Long id) {
+    public ResponseEntity<FullAdsDto> getAdsById(@PathVariable("id") Integer id) {
 
         return ResponseEntity.ok(adsService.getById(id));
     }
@@ -161,7 +159,7 @@ public class AdsController {
             }
     )
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteAds(@PathVariable("id") Long id) {
+    public ResponseEntity<?> deleteAds(@PathVariable("id") Integer id) {
         adsService.delete(id);
         return ResponseEntity.ok().build();
     }
