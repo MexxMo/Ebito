@@ -42,7 +42,7 @@ public class AdsServiceImpl implements AdsService {
         ads.setPrice(properties.getPrice());
         ads.setAuthor(userService.getUserByEmail(authentication.getName()));
         adsRepository.save(ads);
-        log.info("Successful save ads: {}", ads);
+//        log.info("Successful save ads: {}", ads);
         return AdsMapper.INSTANCE.toDto(ads);
     }
 

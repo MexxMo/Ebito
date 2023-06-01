@@ -14,6 +14,8 @@ import ru.digitalmagicians.ebito.dto.CreateCommentDto;
 import ru.digitalmagicians.ebito.dto.ResponseWrapperCommentDto;
 import ru.digitalmagicians.ebito.service.CommentService;
 
+import java.util.List;
+
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequestMapping("/ads")
@@ -41,9 +43,9 @@ public class CommentController {
     )
     @GetMapping("/{id}/comments")
     public ResponseEntity<ResponseWrapperCommentDto> getComments(@PathVariable("id") Integer id) {
+        List<CommentDto> comments = commentService.getComments(id);
 
-
-        return ResponseEntity.ok((ResponseWrapperCommentDto) commentService.getComments(id));
+        return ResponseEntity.ok(new ResponseWrapperCommentDto(comments.size(), comments));
     }
 
     @Operation(

@@ -14,6 +14,7 @@ import ru.digitalmagicians.ebito.mapper.CommentMapper;
 import ru.digitalmagicians.ebito.repository.CommentRepository;
 import ru.digitalmagicians.ebito.service.AdsService;
 import ru.digitalmagicians.ebito.service.CommentService;
+import ru.digitalmagicians.ebito.service.UserService;
 
 
 import java.util.List;
@@ -24,6 +25,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 
 public class CommentServiceImpl implements CommentService {
+    private final UserService userService;
     private final CommentRepository commentRepository;
     private final AdsService adsService;
 
@@ -44,7 +46,7 @@ public class CommentServiceImpl implements CommentService {
         }
 
         Comment comment = new Comment();
-        User user = (User) authentication.getPrincipal();
+        User user = userService.getUserByEmail(authentication.getName());
 
         comment.setAuthor(user);
         comment.setAds(adsService.getAdsById(id));
@@ -57,7 +59,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void deleteComment(Integer adId, Integer commentId) {
-        Comment comment = getComment(commentId, adId);
+        Comment comment = getComment(adId, commentId);
         commentRepository.delete(comment);
         log.info("Comment removed successfully");
     }
@@ -66,7 +68,7 @@ public class CommentServiceImpl implements CommentService {
     public CommentDto updateComments(Integer adId, Integer commentId,
                                      CommentDto adsCommentDto) {
 
-        if (adsCommentDto.getText() == null || adsCommentDto.getText().isBlank())
+        if (adsCommentDto.getText().isBlank())
             throw new IncorrectArgumentException();
 
         Comment adsComment = getComment(adId, commentId);
@@ -78,7 +80,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     public Comment getComment(Integer adId, Integer commentId) {
-        return commentRepository.findByIdAndAdsId(adId, commentId).orElseThrow(CommentNotFoundException::new);
+        return commentRepository.findByIdAndAdsId(commentId, adId).orElseThrow(CommentNotFoundException::new);
     }
 
     @Override
