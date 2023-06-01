@@ -11,17 +11,17 @@ import ru.digitalmagicians.ebito.dto.ResponseWrapperAdsDto;
 public interface AdsService {
     AdsDto createAds(MultipartFile image, CreateAdsDto properties,Authentication authentication);
 
-   CreateAdsDto updateAds(Long id, CreateAdsDto adsDto);
+   CreateAdsDto updateAds(Integer id, CreateAdsDto adsDto);
 
-   void updateAdsImage(Long id, MultipartFile image);
+   void updateAdsImage(Integer id, MultipartFile image);
 
     ResponseWrapperAdsDto getAll();
 
     ResponseWrapperAdsDto getAllByMe(Authentication authentication);
 
-    FullAdsDto getById(Long id);
+    FullAdsDto getById(Integer id);
 
-   void delete(Long id);
+   void delete(Integer id);
 
-   Ads findAdsById(Integer id);
+    Ads getAdsById(Integer id);
 }

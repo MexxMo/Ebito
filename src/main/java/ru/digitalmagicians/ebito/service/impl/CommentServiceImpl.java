@@ -1,6 +1,6 @@
 package ru.digitalmagicians.ebito.service.impl;
 
-import lombok.NoArgsConstructor;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -14,7 +14,7 @@ import ru.digitalmagicians.ebito.mapper.CommentMapper;
 import ru.digitalmagicians.ebito.repository.CommentRepository;
 import ru.digitalmagicians.ebito.service.AdsService;
 import ru.digitalmagicians.ebito.service.CommentService;
-import ru.digitalmagicians.ebito.service.UserService;
+
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -47,7 +47,7 @@ public class CommentServiceImpl implements CommentService {
         User user = (User) authentication.getPrincipal();
 
         comment.setAuthor(user);
-        comment.setAds(adsService.findAdsById(id));
+        comment.setAds(adsService.getAdsById(id));
         comment.setCreatedAt(System.currentTimeMillis());
         comment.setText(createCommentDto.getText());
         commentRepository.save(comment);
