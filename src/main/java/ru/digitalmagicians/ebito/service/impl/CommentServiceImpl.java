@@ -1,54 +1,62 @@
 package ru.digitalmagicians.ebito.service.impl;
 
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import ru.digitalmagicians.ebito.dto.CommentDto;
+import ru.digitalmagicians.ebito.dto.CreateCommentDto;
 import ru.digitalmagicians.ebito.entity.Comment;
 import ru.digitalmagicians.ebito.entity.User;
+import ru.digitalmagicians.ebito.exception.*;
 import ru.digitalmagicians.ebito.mapper.CommentMapper;
 import ru.digitalmagicians.ebito.repository.CommentRepository;
+import ru.digitalmagicians.ebito.service.AdsService;
 import ru.digitalmagicians.ebito.service.CommentService;
+import ru.digitalmagicians.ebito.service.UserService;
 
-import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
+
 public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
-    private final UserServiceImpl userService;
-    //private final AdsServiceImpl adsService;
+    private final AdsService adsService;
+
 
     @Override
     public List<CommentDto> getComments(Integer id) {
-        log.debug("Getting comments for ads with id: {}", id);
         return commentRepository.findAllByAdsId(id)
                 .stream()
-                .map(CommentMapper.INSTANSE::toDto)
+                .map(CommentMapper.INSTANCE::commentToDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public CommentDto addComment(Integer id, CommentDto commentDto, Authentication authentication) {
-        log.debug("Adding comment for ads with id: {}", id);
-        if(commentDto.getText() == null || commentDto.getText().isBlank()) throw new IncorrectArgumentException();
+    public CommentDto addComment(Integer id, CreateCommentDto createCommentDto, Authentication authentication) {
 
-        Comment comment = CommentMapper.INSTANSE.toEntity(commentDto);
+        if (createCommentDto.getText() == null || createCommentDto.getText().isBlank()) {
+            throw new IncorrectArgumentException();
+        }
+
+        Comment comment = new Comment();
         User user = (User) authentication.getPrincipal();
+
         comment.setAuthor(user);
         comment.setAds(adsService.findAdsById(id));
-        comment.setCreatedAt(Instant.now());
+        comment.setCreatedAt(System.currentTimeMillis());
+        comment.setText(createCommentDto.getText());
         commentRepository.save(comment);
-        return CommentMapper.INSTANSE.toDto(comment);
+        log.info("Comment added id: {}", id);
+        return CommentMapper.INSTANCE.commentToDto(comment);
     }
 
     @Override
     public void deleteComment(Integer adId, Integer commentId) {
-        log.debug("Deleting comment with id: {} for ads with id: {}", commentId, adId);
         Comment comment = getComment(commentId, adId);
         commentRepository.delete(comment);
         log.info("Comment removed successfully");
@@ -56,25 +64,25 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public CommentDto updateComments(Integer adId, Integer commentId,
-                                        CommentDto adsCommentDto) {
-        log.debug("Updating comment with id: {} for ads with id: {}", commentId, adId);
+                                     CommentDto adsCommentDto) {
 
-        if(adsCommentDto.getText() == null || adsCommentDto.getText().isBlank()) throw new IncorrectArgumentException();
+        if (adsCommentDto.getText() == null || adsCommentDto.getText().isBlank())
+            throw new IncorrectArgumentException();
 
-        Comment adsComment = getComment(commentId, adId);
+        Comment adsComment = getComment(adId, commentId);
         adsComment.setText(adsCommentDto.getText());
         commentRepository.save(adsComment);
-        return CommentMapper.INSTANSE.toDto(adsComment);
+        log.info("Comment update successfully");
+        return CommentMapper.INSTANCE.commentToDto(adsComment);
+
     }
 
-    public Comment getComment(Integer commentId, Integer adId) {
-        log.debug("Getting comment with id: {} for ads with id: {}", commentId, adId);
-        return commentRepository.findByIdAndAdsId(commentId, adId).orElseThrow(CommentNotFoundException::new);
+    public Comment getComment(Integer adId, Integer commentId) {
+        return commentRepository.findByIdAndAdsId(adId, commentId).orElseThrow(CommentNotFoundException::new);
     }
 
     @Override
     public Comment getCommentById(Integer id) {
-        log.debug("Getting comment with id: {}", id);
         return commentRepository.findById(id).orElseThrow(CommentNotFoundException::new);
     }
 

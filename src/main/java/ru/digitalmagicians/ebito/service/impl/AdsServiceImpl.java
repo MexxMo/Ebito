@@ -124,4 +124,9 @@ public class AdsServiceImpl implements AdsService {
         }
         return optionalAds.get();
     }
+
+    public Ads findAdsById(Integer id) {
+        log.debug("Finding ads by id: {}", id);
+        return adsRepository.findById(id).orElseThrow(()-> new AdsValidationException("Id ads not found"));
+    }
 }
