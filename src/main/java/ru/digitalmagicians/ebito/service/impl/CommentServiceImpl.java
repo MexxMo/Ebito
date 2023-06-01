@@ -1,5 +1,6 @@
 package ru.digitalmagicians.ebito.service.impl;
 
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -13,6 +14,7 @@ import ru.digitalmagicians.ebito.mapper.CommentMapper;
 import ru.digitalmagicians.ebito.repository.CommentRepository;
 import ru.digitalmagicians.ebito.service.AdsService;
 import ru.digitalmagicians.ebito.service.CommentService;
+
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,9 +37,9 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public CommentDto addComment(Integer id, CommentDto commentDto, Authentication authentication) {
+    public CommentDto addComment(Integer id, CreateCommentDto createCommentDto, Authentication authentication) {
 
-        if (commentDto.getText() == null || commentDto.getText().isBlank()) {
+        if (createCommentDto.getText() == null || createCommentDto.getText().isBlank()) {
             throw new IncorrectArgumentException();
         }
 
@@ -45,9 +47,9 @@ public class CommentServiceImpl implements CommentService {
         User user = (User) authentication.getPrincipal();
 
         comment.setAuthor(user);
-        comment.setAds(adsService.findAdsById(id));
+        comment.setAds(adsService.getAdsById(id));
         comment.setCreatedAt(System.currentTimeMillis());
-        comment.setText(commentDto.getText());
+        comment.setText(createCommentDto.getText());
         commentRepository.save(comment);
         log.info("Comment added id: {}", id);
         return CommentMapper.INSTANCE.commentToDto(comment);
@@ -62,13 +64,13 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public CommentDto updateComments(Integer adId, Integer commentId,
-                                     CreateCommentDto createCommentDto) {
+                                     CommentDto adsCommentDto) {
 
-        if (createCommentDto.getText() == null || createCommentDto.getText().isBlank())
+        if (adsCommentDto.getText() == null || adsCommentDto.getText().isBlank())
             throw new IncorrectArgumentException();
 
         Comment adsComment = getComment(adId, commentId);
-        adsComment.setText(createCommentDto.getText());
+        adsComment.setText(adsCommentDto.getText());
         commentRepository.save(adsComment);
         log.info("Comment update successfully");
         return CommentMapper.INSTANCE.commentToDto(adsComment);
