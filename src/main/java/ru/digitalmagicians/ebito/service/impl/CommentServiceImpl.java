@@ -26,13 +26,14 @@ public class CommentServiceImpl implements CommentService {
     private final UserService userService;
     private final CommentRepository commentRepository;
     private final AdsService adsService;
+    private final CommentMapper commentMapper;
 
 
     @Override
     public List<CommentDto> getComments(Integer id) {
         return commentRepository.findAllByAdsId(id)
                 .stream()
-                .map(CommentMapper.INSTANCE::commentToDto)
+                .map(commentMapper::commentToDto)
                 .collect(Collectors.toList());
     }
 
@@ -52,7 +53,7 @@ public class CommentServiceImpl implements CommentService {
         comment.setText(createCommentDto.getText());
         commentRepository.save(comment);
         log.info("Comment added id: {}", id);
-        return CommentMapper.INSTANCE.commentToDto(comment);
+        return commentMapper.commentToDto(comment);
     }
 
     @Override
@@ -73,7 +74,7 @@ public class CommentServiceImpl implements CommentService {
         adsComment.setText(adsCommentDto.getText());
         commentRepository.save(adsComment);
         log.info("Comment update successfully");
-        return CommentMapper.INSTANCE.commentToDto(adsComment);
+        return commentMapper.commentToDto(adsComment);
 
     }
 

@@ -18,7 +18,6 @@ import ru.digitalmagicians.ebito.service.AdsService;
 import ru.digitalmagicians.ebito.service.UserService;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -29,6 +28,7 @@ import java.util.stream.Collectors;
 public class AdsServiceImpl implements AdsService {
     private final AdsRepository adsRepository;
     private final UserService userService;
+    private final AdsMapper adsMapper;
 
     @Override
     public AdsDto createAds(MultipartFile image, CreateAdsDto properties, Authentication authentication) {
@@ -41,9 +41,9 @@ public class AdsServiceImpl implements AdsService {
         ads.setDescription(properties.getDescription());
         ads.setPrice(properties.getPrice());
         ads.setAuthor(userService.getUserByEmail(authentication.getName()));
-        adsRepository.save(ads);
+        Ads updatedAds = adsRepository.save(ads);
 //        log.info("Successful save ads: {}", ads);
-        return AdsMapper.INSTANCE.toDto(ads);
+        return adsMapper.toDto(updatedAds);
     }
 
     private boolean validation(CreateAdsDto properties) {
@@ -53,7 +53,7 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public CreateAdsDto updateAds(Integer id, CreateAdsDto createAds) {
+    public AdsDto updateAds(Integer id, CreateAdsDto createAds) {
         if (validation(createAds)) {
             log.error("empty fields CreateAdsDto updateAds");
             throw new AdsValidationException("empty fields updateAds");
@@ -62,9 +62,10 @@ public class AdsServiceImpl implements AdsService {
         ads.setTitle(createAds.getTitle());
         ads.setDescription(createAds.getDescription());
         ads.setPrice(createAds.getPrice());
-        adsRepository.save(ads);
+        Ads savedAds = adsRepository.save(ads);
         log.info("Successful updating ads by id: {}", id);
-        return null;
+
+        return adsMapper.toDto(savedAds);
     }
 
     @Override
@@ -77,7 +78,7 @@ public class AdsServiceImpl implements AdsService {
     public ResponseWrapperAdsDto getAll() {
         log.info("Searching all ads");
         List<AdsDto> ads = adsRepository.findAll().stream()
-                .map(AdsMapper.INSTANCE::toDto)
+                .map(adsMapper::toDto)
                 .collect(Collectors.toList());
         return new ResponseWrapperAdsDto(ads.size(), ads);
     }
@@ -87,7 +88,7 @@ public class AdsServiceImpl implements AdsService {
         log.info("Searching all ads by author");
         List<AdsDto> ads = adsRepository.findAllByAuthorId(userService.getUserByEmail(authentication.getName()).getId())
                 .stream()
-                .map(AdsMapper.INSTANCE::toDto)
+                .map(adsMapper::toDto)
                 .collect(java.util.stream.Collectors.toList());
         return new ResponseWrapperAdsDto(ads.size(), ads);
     }
@@ -96,7 +97,7 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public FullAdsDto getById(Integer id) {
         log.info("Searching ads by id: {}", id);
-        return AdsMapper.INSTANCE.toFullAds(getAdsById(id));
+        return adsMapper.toFullAds(getAdsById(id));
     }
 
     @Override
@@ -112,11 +113,9 @@ public class AdsServiceImpl implements AdsService {
             log.error("Ads id is null");
             throw new IllegalArgumentException("Ads id is null");
         }
-        Optional<Ads> optionalAds = adsRepository.findById(id);
-        if (optionalAds.isEmpty()) {
+        return adsRepository.findById(id).orElseThrow(() -> {
             log.error("Ads not found for id: {}", id);
-            throw new AdsValidationException("Ads not found");
-        }
-        return optionalAds.get();
+            return new AdsValidationException("Ads not found");
+        });
     }
 }

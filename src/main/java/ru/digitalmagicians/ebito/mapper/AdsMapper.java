@@ -4,7 +4,6 @@ import org.mapstruct.Mapper;
 
 
 import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
 
 import ru.digitalmagicians.ebito.dto.AdsDto;
 import ru.digitalmagicians.ebito.dto.FullAdsDto;
@@ -12,8 +11,6 @@ import ru.digitalmagicians.ebito.entity.Ads;
 
 @Mapper(componentModel = "spring")
 public interface AdsMapper {
-    AdsMapper INSTANCE = Mappers.getMapper(AdsMapper.class);
-
     @Mapping(target = "pk", source = "id")
     @Mapping(target = "author", source = "author.id")
     AdsDto toDto(Ads ads);
