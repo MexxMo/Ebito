@@ -11,7 +11,7 @@ import ru.digitalmagicians.ebito.dto.ResponseWrapperAdsDto;
 public interface AdsService {
     AdsDto createAds(MultipartFile image, CreateAdsDto properties,Authentication authentication);
 
-   CreateAdsDto updateAds(Integer id, CreateAdsDto adsDto);
+   AdsDto updateAds(Integer id, CreateAdsDto adsDto);
 
    void updateAdsImage(Integer id, MultipartFile image);
 
