@@ -14,8 +14,6 @@ import ru.digitalmagicians.ebito.exception.UserAlreadyExistException;
 import ru.digitalmagicians.ebito.exception.UserNotFoundException;
 import ru.digitalmagicians.ebito.repository.UserRepository;
 
-import java.util.Optional;
-
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -26,11 +24,7 @@ public class EbitoUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> optionalUser = userRepository.getUserByEmailIgnoreCase(username);
-        if (optionalUser.isEmpty()) {
-            throw new UserNotFoundException();
-        }
-        User user = optionalUser.get();
+        User user = userRepository.getUserByEmailIgnoreCase(username).orElseThrow(UserNotFoundException::new);
         return new EbitoUserDetails(user);
     }
 
