@@ -53,7 +53,7 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public CreateAdsDto updateAds(Integer id, CreateAdsDto createAds) {
+    public AdsDto updateAds(Integer id, CreateAdsDto createAds) {
         if (validation(createAds)) {
             log.error("empty fields CreateAdsDto updateAds");
             throw new AdsValidationException("empty fields updateAds");
@@ -62,10 +62,10 @@ public class AdsServiceImpl implements AdsService {
         ads.setTitle(createAds.getTitle());
         ads.setDescription(createAds.getDescription());
         ads.setPrice(createAds.getPrice());
-        Ads save = adsRepository.save(ads);
+        Ads savedAds = adsRepository.save(ads);
         log.info("Successful updating ads by id: {}", id);
 
-        return null;
+        return adsMapper.toDto(savedAds);
     }
 
     @Override
