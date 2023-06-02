@@ -40,7 +40,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public CommentDto addComment(Integer id, CreateCommentDto createCommentDto, Authentication authentication) {
 
-        if (createCommentDto.getText() == null || createCommentDto.getText().isBlank()) {
+        if (createCommentDto.getText().isBlank()) {
             throw new IncorrectArgumentException();
         }
 
@@ -60,7 +60,7 @@ public class CommentServiceImpl implements CommentService {
     public void deleteComment(Integer adId, Integer commentId) {
         Comment comment = getComment(adId, commentId);
         commentRepository.delete(comment);
-        log.info("Comment removed successfully");
+        log.info("Comment adId:{} commentID:{} removed successfully",adId,commentId);
     }
 
     @Override
@@ -73,13 +73,13 @@ public class CommentServiceImpl implements CommentService {
         Comment adsComment = getComment(adId, commentId);
         adsComment.setText(adsCommentDto.getText());
         commentRepository.save(adsComment);
-        log.info("Comment update successfully");
+        log.info("Comment update successfully adId:{}, commentId:{}", adId, commentId);
         return commentMapper.commentToDto(adsComment);
 
     }
 
     public Comment getComment(Integer adId, Integer commentId) {
-        return commentRepository.findByIdAndAdsId(adId,commentId).orElseThrow(CommentNotFoundException::new);
+        return commentRepository.findByIdAndAdsId(adId, commentId).orElseThrow(CommentNotFoundException::new);
     }
 
 
