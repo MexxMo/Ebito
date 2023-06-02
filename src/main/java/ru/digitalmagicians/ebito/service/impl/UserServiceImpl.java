@@ -19,6 +19,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder encoder;
+    private final UserMapper userMapper;
 
     @Override
     public void setPassword(NewPasswordDto newPassword, Authentication authentication) {
@@ -33,7 +34,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto getUser(Authentication authentication) {
         User user = getUserByEmail(authentication.getName());
-        return UserMapper.INSTANCE.toDto(user);
+        return userMapper.toDto(user);
     }
 
     @Override
@@ -46,7 +47,7 @@ public class UserServiceImpl implements UserService {
         user.setLastName(userDto.getLastName());
         user.setPhone(userDto.getPhone());
         userRepository.save(user);
-        return UserMapper.INSTANCE.toDto(user);
+        return userMapper.toDto(user);
     }
 
     @Override

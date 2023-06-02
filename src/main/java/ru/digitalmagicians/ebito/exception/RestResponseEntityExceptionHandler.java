@@ -15,13 +15,6 @@ public class RestResponseEntityExceptionHandler {
                 .body(exception.getMessage());
     }
 
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<String> handleUserNotFoundException(UserNotFoundException exception) {
-        return ResponseEntity
-                .badRequest()
-                .body(exception.getMessage());
-    }
-
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException exception) {
         return ResponseEntity
@@ -35,7 +28,7 @@ public class RestResponseEntityExceptionHandler {
                 .body(exception.getMessage());
     }
 
-    @ExceptionHandler(CommentNotFoundException.class)
+    @ExceptionHandler({CommentNotFoundException.class, UserNotFoundException.class})
     public ResponseEntity<?> handleNotFoundCommentException() {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
