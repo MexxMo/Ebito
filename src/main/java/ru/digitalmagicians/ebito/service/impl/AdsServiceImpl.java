@@ -17,6 +17,7 @@ import ru.digitalmagicians.ebito.repository.AdsRepository;
 import ru.digitalmagicians.ebito.service.AdsService;
 import ru.digitalmagicians.ebito.service.UserService;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -80,6 +81,7 @@ public class AdsServiceImpl implements AdsService {
         List<AdsDto> ads = adsRepository.findAll().stream()
                 .map(adsMapper::toDto)
                 .collect(Collectors.toList());
+        Collections.reverse(ads);
         return new ResponseWrapperAdsDto(ads.size(), ads);
     }
 
