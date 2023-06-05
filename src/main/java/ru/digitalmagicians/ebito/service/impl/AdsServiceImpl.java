@@ -87,10 +87,11 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public ResponseWrapperAdsDto getAllByMe(Authentication authentication) {
         log.info("Searching all ads by author");
-        List<AdsDto> ads = adsRepository.findAllByAuthorId(userService.getUserByEmail(authentication.getName()).getId())
+        List<AdsDto> ads = adsRepository.findAllByAuthorIdOrderByIdDesc
+                        (userService.getUserByEmail(authentication.getName()).getId())
                 .stream()
                 .map(adsMapper::toDto)
-                .collect(java.util.stream.Collectors.toList());
+                .collect(Collectors.toList());
         return new ResponseWrapperAdsDto(ads.size(), ads);
     }
 
