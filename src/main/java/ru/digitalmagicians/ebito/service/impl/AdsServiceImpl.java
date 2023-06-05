@@ -42,7 +42,7 @@ public class AdsServiceImpl implements AdsService {
         ads.setPrice(properties.getPrice());
         ads.setAuthor(userService.getUserByEmail(authentication.getName()));
         Ads updatedAds = adsRepository.save(ads);
-       log.info("Successful save ads");
+        log.info("Successful save ads");
         return adsMapper.toDto(updatedAds);
     }
 
@@ -106,6 +106,7 @@ public class AdsServiceImpl implements AdsService {
         adsRepository.delete(ads);
         log.info("Successful deleting ads by id: {}", id);
     }
+
     @Override
     public Ads getAdsById(Integer id) {
         log.info("Searching ads by id: {}", id);
