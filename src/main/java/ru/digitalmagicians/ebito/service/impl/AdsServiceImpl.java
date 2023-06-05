@@ -96,7 +96,7 @@ public class AdsServiceImpl implements AdsService {
 
     @Override
     public FullAdsDto getById(Integer id) {
-        log.info("Searching ads by id: {}", id);
+        log.info("Searching by id: {}", id);
         return adsMapper.toFullAds(getAdsById(id));
     }
 
