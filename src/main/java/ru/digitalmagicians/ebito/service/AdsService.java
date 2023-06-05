@@ -25,4 +25,5 @@ public interface AdsService {
     void delete(Integer id);
 
     Ads getAdsById(Integer id);
+    ResponseWrapperAdsDto getAll(String search);
 }

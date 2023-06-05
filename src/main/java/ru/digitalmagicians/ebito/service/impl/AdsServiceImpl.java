@@ -17,7 +17,6 @@ import ru.digitalmagicians.ebito.repository.AdsRepository;
 import ru.digitalmagicians.ebito.service.AdsService;
 import ru.digitalmagicians.ebito.service.UserService;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -121,4 +120,16 @@ public class AdsServiceImpl implements AdsService {
             return new AdsValidationException("Ads not found");
         });
     }
+
+    @Override
+    public ResponseWrapperAdsDto getAll(String search) {
+        log.info("Search all ads according to the query: {}", search);
+        List<AdsDto> ads = adsRepository.findAllByTitleContainingIgnoreCase(search)
+                .stream()
+                .map(adsMapper::toDto)
+                .collect(Collectors.toList());
+        return new ResponseWrapperAdsDto(ads.size(), ads);
+    }
+
+
 }
