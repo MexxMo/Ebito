@@ -78,10 +78,10 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public ResponseWrapperAdsDto getAll() {
         log.info("Searching all ads");
-        List<AdsDto> ads = adsRepository.findAll().stream()
+        List<AdsDto> ads = adsRepository.findAllByOrderByIdDesc()
+                .stream()
                 .map(adsMapper::toDto)
                 .collect(Collectors.toList());
-        Collections.reverse(ads);
         return new ResponseWrapperAdsDto(ads.size(), ads);
     }
 
