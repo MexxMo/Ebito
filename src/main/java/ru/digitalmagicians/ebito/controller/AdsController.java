@@ -46,7 +46,7 @@ public class AdsController {
     public ResponseEntity<AdsDto> setAds(@RequestPart("image") MultipartFile image,
                                          @RequestPart("properties") CreateAdsDto properties, Authentication authentication) {
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(adsService.createAds(image, properties,authentication));
+        return ResponseEntity.status(HttpStatus.CREATED).body(adsService.createAds(image, properties, authentication));
     }
 
     @Operation(

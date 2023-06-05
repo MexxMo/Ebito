@@ -60,7 +60,7 @@ public class CommentServiceImpl implements CommentService {
     public void deleteComment(Integer adId, Integer commentId) {
         Comment comment = getComment(adId, commentId);
         commentRepository.delete(comment);
-        log.info("Comment adId:{} commentID:{} removed successfully",adId,commentId);
+        log.info("Comment adId:{} commentID:{} removed successfully", adId, commentId);
     }
 
     @Override

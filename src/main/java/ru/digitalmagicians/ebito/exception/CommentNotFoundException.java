@@ -1,4 +1,4 @@
 package ru.digitalmagicians.ebito.exception;
 
-public class CommentNotFoundException extends RuntimeException{
+public class CommentNotFoundException extends RuntimeException {
 }

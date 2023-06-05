@@ -9,9 +9,13 @@ import ru.digitalmagicians.ebito.entity.User;
 public interface UserService {
 
     void setPassword(NewPasswordDto newPassword, Authentication authentication);
+
     UserDto getUser(Authentication authentication);
+
     UserDto updateUser(UserDto userDto, Authentication authentication);
+
     void updateAvatar(MultipartFile image, Authentication authentication);
+
     User getUserByEmail(String email);
 
 }

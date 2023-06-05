@@ -19,34 +19,34 @@ import ru.digitalmagicians.ebito.service.AuthService;
 @Transactional
 public class AuthServiceImpl implements AuthService {
 
-  private final EbitoUserDetailsService manager;
+    private final EbitoUserDetailsService manager;
 
-  private final PasswordEncoder encoder;
+    private final PasswordEncoder encoder;
 
-  @Override
-  public boolean login(String userName, String password) {
-    try {
-      UserDetails userDetails = manager.loadUserByUsername(userName);
-      return encoder.matches(password, userDetails.getPassword());
-    } catch (UserNotFoundException e) {
-      log.error(e.getMessage());
-      return false;
+    @Override
+    public boolean login(String userName, String password) {
+        try {
+            UserDetails userDetails = manager.loadUserByUsername(userName);
+            return encoder.matches(password, userDetails.getPassword());
+        } catch (UserNotFoundException e) {
+            log.error(e.getMessage());
+            return false;
+        }
     }
-  }
 
-  @Override
-  public boolean register(RegisterReq registerReq, Role role) {
-    if (registerReq.getUsername().isBlank() || registerReq.getFirstName().isBlank()
-            || registerReq.getLastName().isBlank() || registerReq.getPhone().isBlank()
-            || registerReq.getPassword().isBlank()) {
-      throw new IllegalArgumentException("All fields must be filled");
+    @Override
+    public boolean register(RegisterReq registerReq, Role role) {
+        if (registerReq.getUsername().isBlank() || registerReq.getFirstName().isBlank()
+                || registerReq.getLastName().isBlank() || registerReq.getPhone().isBlank()
+                || registerReq.getPassword().isBlank()) {
+            throw new IllegalArgumentException("All fields must be filled");
+        }
+        try {
+            manager.createUser(registerReq);
+        } catch (UserAlreadyExistException e) {
+            log.error(e.getMessage());
+        }
+        log.info("User {} successfully created", registerReq.getUsername());
+        return true;
     }
-    try {
-      manager.createUser(registerReq);
-    } catch (UserAlreadyExistException e) {
-      log.error(e.getMessage());
-    }
-    log.info("User {} successfully created", registerReq.getUsername());
-    return true;
-  }
 }
