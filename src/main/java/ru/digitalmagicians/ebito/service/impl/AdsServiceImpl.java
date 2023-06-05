@@ -17,7 +17,6 @@ import ru.digitalmagicians.ebito.repository.AdsRepository;
 import ru.digitalmagicians.ebito.service.AdsService;
 import ru.digitalmagicians.ebito.service.UserService;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -78,20 +77,21 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public ResponseWrapperAdsDto getAll() {
         log.info("Searching all ads");
-        List<AdsDto> ads = adsRepository.findAll().stream()
+        List<AdsDto> ads = adsRepository.findAllByOrderByIdDesc()
+                .stream()
                 .map(adsMapper::toDto)
                 .collect(Collectors.toList());
-        Collections.reverse(ads);
         return new ResponseWrapperAdsDto(ads.size(), ads);
     }
 
     @Override
     public ResponseWrapperAdsDto getAllByMe(Authentication authentication) {
         log.info("Searching all ads by author");
-        List<AdsDto> ads = adsRepository.findAllByAuthorId(userService.getUserByEmail(authentication.getName()).getId())
+        List<AdsDto> ads = adsRepository.findAllByAuthorIdOrderByIdDesc
+                        (userService.getUserByEmail(authentication.getName()).getId())
                 .stream()
                 .map(adsMapper::toDto)
-                .collect(java.util.stream.Collectors.toList());
+                .collect(Collectors.toList());
         return new ResponseWrapperAdsDto(ads.size(), ads);
     }
 
@@ -121,4 +121,16 @@ public class AdsServiceImpl implements AdsService {
             return new AdsValidationException("Ads not found");
         });
     }
+
+    @Override
+    public ResponseWrapperAdsDto getAll(String search) {
+        log.info("Search all ads according to the query: {}", search);
+        List<AdsDto> ads = adsRepository.findAllByTitleContainingIgnoreCase(search)
+                .stream()
+                .map(adsMapper::toDto)
+                .collect(Collectors.toList());
+        return new ResponseWrapperAdsDto(ads.size(), ads);
+    }
+
+
 }
