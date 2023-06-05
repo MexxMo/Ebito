@@ -163,5 +163,24 @@ public class AdsController {
         adsService.delete(id);
         return ResponseEntity.ok().build();
     }
+    @Operation(
+            summary = "Получить все объявления, удовлетворяющие поиску",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "OK",
+                            content = {
+                                    @Content(
+                                            mediaType = "application/json",
+                                            schema = @Schema(implementation = ResponseWrapperAdsDto.class)
+                                    )
+                            }
+                    )
+            }
+    )
+    @GetMapping("/search{search}")
+    public ResponseEntity<ResponseWrapperAdsDto> getAds(@PathVariable("search") String search) {
+        return ResponseEntity.ok(adsService.getAll(search));
+    }
+
 
 }
