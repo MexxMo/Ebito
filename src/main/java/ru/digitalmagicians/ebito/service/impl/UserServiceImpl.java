@@ -15,7 +15,6 @@ import ru.digitalmagicians.ebito.repository.UserRepository;
 import ru.digitalmagicians.ebito.service.ImageService;
 import ru.digitalmagicians.ebito.service.UserService;
 
-import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor

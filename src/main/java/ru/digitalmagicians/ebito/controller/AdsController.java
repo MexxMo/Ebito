@@ -17,6 +17,7 @@ import ru.digitalmagicians.ebito.dto.CreateAdsDto;
 import ru.digitalmagicians.ebito.dto.FullAdsDto;
 import ru.digitalmagicians.ebito.dto.ResponseWrapperAdsDto;
 import ru.digitalmagicians.ebito.service.AdsService;
+import ru.digitalmagicians.ebito.service.ImageService;
 
 
 @CrossOrigin(value = "http://localhost:3000")
@@ -26,6 +27,7 @@ import ru.digitalmagicians.ebito.service.AdsService;
 @RequiredArgsConstructor
 public class AdsController {
     private final AdsService adsService;
+    private final ImageService imageService;
 
     @Operation(
             summary = "Добавить объявления",
@@ -181,6 +183,17 @@ public class AdsController {
     @GetMapping("/search/{search}")
     public ResponseEntity<ResponseWrapperAdsDto> getAds(@PathVariable("search") String search) {
         return ResponseEntity.ok(adsService.getAll(search));
+    }
+     @Operation(
+            summary = "Получить картинку объявления",
+            tags = "Объявления",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "OK"),
+                    @ApiResponse(responseCode = "404", description = "Not found", content = @Content())
+            })
+    @GetMapping(value = "/{id}/image", produces = MediaType.IMAGE_PNG_VALUE)
+    public ResponseEntity<byte[]> getImage(@PathVariable("id") String id) {
+        return ResponseEntity.ok(imageService.getImageById(id));
     }
 
 

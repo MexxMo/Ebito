@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import ru.digitalmagicians.ebito.entity.Image;
 
+import ru.digitalmagicians.ebito.exception.CommentNotFoundException;
 import ru.digitalmagicians.ebito.repository.ImageRepository;
 
 import ru.digitalmagicians.ebito.service.ImageService;
@@ -47,6 +48,11 @@ public class ImageServiceImpl implements ImageService {
         return imageRepository.saveAndFlush(oldImage);
     }
 
+@Override
+    public byte[] getImageById(String id) {
+        Image image = imageRepository.findById(id).orElseThrow(CommentNotFoundException::new);
+        return image.getImage();
+    }
 
 
 }
