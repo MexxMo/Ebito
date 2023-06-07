@@ -15,6 +15,8 @@ import ru.digitalmagicians.ebito.dto.NewPasswordDto;
 import ru.digitalmagicians.ebito.dto.UserDto;
 import ru.digitalmagicians.ebito.service.UserService;
 
+import java.io.IOException;
+
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequiredArgsConstructor
@@ -89,7 +91,7 @@ public class UserController {
     )
     @PatchMapping(value = "me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> updateUserImage(@RequestPart("image") MultipartFile image,
-                                                  Authentication authentication) {
+                                                  Authentication authentication){
         userService.updateAvatar(image, authentication);
         return ResponseEntity.ok().build();
     }

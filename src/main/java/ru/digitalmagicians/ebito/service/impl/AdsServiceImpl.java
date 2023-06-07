@@ -11,11 +11,15 @@ import ru.digitalmagicians.ebito.dto.CreateAdsDto;
 import ru.digitalmagicians.ebito.dto.FullAdsDto;
 import ru.digitalmagicians.ebito.dto.ResponseWrapperAdsDto;
 import ru.digitalmagicians.ebito.entity.Ads;
+import ru.digitalmagicians.ebito.entity.Image;
 import ru.digitalmagicians.ebito.exception.AdsValidationException;
+import ru.digitalmagicians.ebito.exception.CommentNotFoundException;
 import ru.digitalmagicians.ebito.mapper.AdsMapper;
 import ru.digitalmagicians.ebito.repository.AdsRepository;
 import ru.digitalmagicians.ebito.service.AdsService;
+import ru.digitalmagicians.ebito.service.ImageService;
 import ru.digitalmagicians.ebito.service.UserService;
+
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,6 +33,7 @@ public class AdsServiceImpl implements AdsService {
     private final AdsRepository adsRepository;
     private final UserService userService;
     private final AdsMapper adsMapper;
+    private final ImageService imageService;
 
     @Override
     public AdsDto createAds(MultipartFile image, CreateAdsDto properties, Authentication authentication) {
@@ -37,6 +42,8 @@ public class AdsServiceImpl implements AdsService {
             throw new AdsValidationException("empty fields createAds");
         }
         Ads ads = new Ads();
+        Image newImage = imageService.saveImage(image);
+        ads.setImage(newImage);
         ads.setTitle(properties.getTitle());
         ads.setDescription(properties.getDescription());
         ads.setPrice(properties.getPrice());
@@ -70,7 +77,10 @@ public class AdsServiceImpl implements AdsService {
 
     @Override
     public void updateAdsImage(Integer id, MultipartFile image) {
-        // todo
+        Ads ads = adsRepository.findById(id).orElseThrow(CommentNotFoundException::new);
+        Image updatedImage = imageService.updateImage(image, ads.getImage());
+        ads.setImage(updatedImage);
+        adsRepository.save(ads);
     }
 
 

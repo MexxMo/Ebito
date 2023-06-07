@@ -84,7 +84,8 @@ public class AdsController {
             }
     )
     @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> updateAdsImage(@PathVariable("id") Long id, @RequestPart("image") MultipartFile image) {
+    public ResponseEntity<byte[]> updateAdsImage(@PathVariable("id") Integer id, @RequestPart("image") MultipartFile image) {
+        adsService.updateAdsImage(id,image);
         return ResponseEntity.ok().build();
     }
 
@@ -177,7 +178,7 @@ public class AdsController {
                     )
             }
     )
-    @GetMapping("/search{search}")
+    @GetMapping("/search/{search}")
     public ResponseEntity<ResponseWrapperAdsDto> getAds(@PathVariable("search") String search) {
         return ResponseEntity.ok(adsService.getAll(search));
     }

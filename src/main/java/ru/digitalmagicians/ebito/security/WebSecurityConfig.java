@@ -30,6 +30,7 @@ public class WebSecurityConfig {
                 .disable()
                 .authorizeHttpRequests(authorize -> authorize
                         .mvcMatchers(AUTH_WHITELIST).permitAll()
+                        .mvcMatchers("/ads/**", "/users/**").authenticated()
                         .anyRequest().authenticated())
                 .cors()
                 .and()
@@ -37,10 +38,6 @@ public class WebSecurityConfig {
         return http.build();
     }
 
-//    @Override
-//    protected void configure(HttpSecurity http) throws Exception {
-//        http.cors();
-//    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {

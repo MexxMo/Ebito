@@ -9,7 +9,7 @@ import ru.digitalmagicians.ebito.entity.Comment;
 public interface CommentMapper {
     @Mapping(target = "author", source = "author.id")
     @Mapping(target = "authorFirstName", source = "author.firstName")
-    /// @Mapping(target = "authorImage", source = "author.image", qualifiedByName = "imageMapping")
+//    @Mapping(target = "image", source = "author.id")
     @Mapping(target = "pk", source = "id")
     @Mapping(target = "createdAt", source = "createdAt")
     @Mapping(target = "text", source = "text")
