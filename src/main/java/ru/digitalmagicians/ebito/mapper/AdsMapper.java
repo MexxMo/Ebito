@@ -27,6 +27,9 @@ public interface AdsMapper {
     FullAdsDto toFullAds(Ads ads);
     @Named("imageMapper")
     default String imageMapper(Image image) {
+        if (image == null) {
+            return null;
+        }
         return "/ads/image/"+image.getId();
     }
 }

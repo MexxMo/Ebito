@@ -13,6 +13,9 @@ public interface UserMapper {
     UserDto toDto(User user);
     @Named("imageMapper")
     default String imageMapper(Image image) {
+        if (image == null) {
+            return null;
+        }
         return "/users/image/"+image.getId();
     }
 }

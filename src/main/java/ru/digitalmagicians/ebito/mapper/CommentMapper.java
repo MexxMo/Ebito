@@ -18,6 +18,9 @@ public interface CommentMapper {
     CommentDto commentToDto(Comment entity);
     @Named("imageMapper")
     default String imageMapper(Image image) {
+        if (image == null) {
+            return null;
+        }
         return "/users/image/"+image.getId();
     }
 }
