@@ -13,7 +13,6 @@ import ru.digitalmagicians.ebito.dto.ResponseWrapperAdsDto;
 import ru.digitalmagicians.ebito.entity.Ads;
 import ru.digitalmagicians.ebito.entity.Image;
 import ru.digitalmagicians.ebito.exception.AdsValidationException;
-import ru.digitalmagicians.ebito.exception.CommentNotFoundException;
 import ru.digitalmagicians.ebito.exception.PermissionDeniedException;
 import ru.digitalmagicians.ebito.mapper.AdsMapper;
 import ru.digitalmagicians.ebito.repository.AdsRepository;
@@ -83,7 +82,7 @@ public class AdsServiceImpl implements AdsService {
 
     @Override
     public void updateAdsImage(Integer id, MultipartFile image) {
-        Ads ads = adsRepository.findById(id).orElseThrow(CommentNotFoundException::new);
+        Ads ads = adsRepository.findById(id).orElseThrow(() -> new AdsValidationException("Ads not found"));
         Image updatedImage = imageService.updateImage(image, ads.getImage());
         ads.setImage(updatedImage);
         adsRepository.save(ads);

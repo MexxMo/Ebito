@@ -29,7 +29,7 @@ public class RestResponseEntityExceptionHandler {
                 .body(exception.getMessage());
     }
 
-    @ExceptionHandler({CommentNotFoundException.class, UserNotFoundException.class})
+    @ExceptionHandler({CommentNotFoundException.class, UserNotFoundException.class,ImageNotFoundException.class})
     public ResponseEntity<?> handleNotFoundCommentException() {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
