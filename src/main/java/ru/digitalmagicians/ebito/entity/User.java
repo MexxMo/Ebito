@@ -1,6 +1,6 @@
 package ru.digitalmagicians.ebito.entity;
 
-import lombok.Data;
+import lombok.*;
 import ru.digitalmagicians.ebito.dto.Role;
 
 import javax.persistence.*;
@@ -8,7 +8,11 @@ import java.util.List;
 
 @Entity
 @Table(name = "users")
-@Data
+@NoArgsConstructor
+@EqualsAndHashCode
+@AllArgsConstructor
+@Getter
+@Setter
 public class User {
 
     @Id
@@ -26,7 +30,4 @@ public class User {
     private Role role;
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
     private List<Ads> ads;
-    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
-    private List<Comment> comments;
-
 }

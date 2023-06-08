@@ -1,13 +1,16 @@
 package ru.digitalmagicians.ebito.entity;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
-@Data
 @Table(name = "ads")
+@NoArgsConstructor
+@EqualsAndHashCode
+@AllArgsConstructor
+@Getter
+@Setter
 public class Ads {
 
     @Id
@@ -15,17 +18,12 @@ public class Ads {
     private Integer id;
     private String title;
     private String description;
-
     private int price;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     private User author;
 
-    @OneToMany(mappedBy = "ads", cascade = CascadeType.ALL)
-    private List<Comment> comments;
-
-    @OneToOne (cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "image_ads")
     private Image image;
-
 }
