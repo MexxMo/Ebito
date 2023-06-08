@@ -24,6 +24,8 @@ public class Ads {
     @OneToMany(mappedBy = "ads", cascade = CascadeType.ALL)
     private List<Comment> comments;
 
-    private String image;
+    @OneToOne (cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "image_ads")
+    private Image image;
 
 }

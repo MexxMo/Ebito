@@ -13,11 +13,13 @@ import ru.digitalmagicians.ebito.entity.Ads;
 public interface AdsMapper {
     @Mapping(target = "pk", source = "id")
     @Mapping(target = "author", source = "author.id")
+    @Mapping(target = "image", source = "image.id")
     AdsDto toDto(Ads ads);
 
     @Mapping(target = "authorFirstName", source = "author.firstName")
     @Mapping(target = "authorLastName", source = "author.lastName")
     @Mapping(target = "phone", source = "author.phone")
+    @Mapping(target = "image", source = "image.id")
     @Mapping(target = "email", source = "author.email")
     @Mapping(target = "pk", source = "id")
     FullAdsDto toFullAds(Ads ads);

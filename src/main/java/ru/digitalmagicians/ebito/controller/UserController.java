@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.digitalmagicians.ebito.dto.NewPasswordDto;
 import ru.digitalmagicians.ebito.dto.UserDto;
+import ru.digitalmagicians.ebito.service.ImageService;
 import ru.digitalmagicians.ebito.service.UserService;
+
 
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
@@ -23,6 +25,7 @@ import ru.digitalmagicians.ebito.service.UserService;
 public class UserController {
 
     private final UserService userService;
+    private final ImageService imageService;
 
     @Operation(
             summary = "Обновление пароля",
@@ -89,9 +92,19 @@ public class UserController {
     )
     @PatchMapping(value = "me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> updateUserImage(@RequestPart("image") MultipartFile image,
-                                                  Authentication authentication) {
+                                                  Authentication authentication){
         userService.updateAvatar(image, authentication);
         return ResponseEntity.ok().build();
+    }
+    @Operation(
+            summary = "Получить аватар пользователя",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "OK"),
+                    @ApiResponse(responseCode = "404", description = "Not found", content = @Content())
+            })
+    @GetMapping(value = "/{id}/image", produces = MediaType.IMAGE_PNG_VALUE)
+    public ResponseEntity<byte[]> getImage(@PathVariable("id") String id) {
+        return ResponseEntity.ok(imageService.getImageById(id));
     }
 
 }

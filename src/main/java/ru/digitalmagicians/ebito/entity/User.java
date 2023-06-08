@@ -19,7 +19,9 @@ public class User {
     private String email;
     private String password;
     private String phone;
-    private String image;
+    @OneToOne (cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "image_avatar")
+    private Image image;
     @Enumerated(EnumType.STRING)
     private Role role;
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)

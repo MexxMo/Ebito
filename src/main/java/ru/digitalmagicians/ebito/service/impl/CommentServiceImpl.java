@@ -58,7 +58,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void deleteComment(Integer adId, Integer commentId) {
-        Comment comment = getComment(adId, commentId);
+        Comment comment = getComment(adId,commentId);
         commentRepository.delete(comment);
         log.info("Comment adId:{} commentID:{} removed successfully", adId, commentId);
     }
@@ -79,7 +79,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     public Comment getComment(Integer adId, Integer commentId) {
-        return commentRepository.findByIdAndAdsId(commentId, adId).orElseThrow(CommentNotFoundException::new);
+        return commentRepository.findByIdAndAdsId(adId, commentId).orElseThrow(CommentNotFoundException::new);
     }
 
 

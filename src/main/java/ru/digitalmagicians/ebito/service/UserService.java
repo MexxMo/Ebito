@@ -6,6 +6,8 @@ import ru.digitalmagicians.ebito.dto.NewPasswordDto;
 import ru.digitalmagicians.ebito.dto.UserDto;
 import ru.digitalmagicians.ebito.entity.User;
 
+import java.io.IOException;
+
 public interface UserService {
 
     void setPassword(NewPasswordDto newPassword, Authentication authentication);
