@@ -38,4 +38,9 @@ public class RestResponseEntityExceptionHandler {
     public ResponseEntity<?> handleIncorrectArgumentException() {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
+
+    @ExceptionHandler(PermissionDeniedException.class)
+    public ResponseEntity<?> handlePermissionDeniedException() {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+    }
 }

@@ -11,6 +11,7 @@ import ru.digitalmagicians.ebito.entity.User;
 import ru.digitalmagicians.ebito.exception.*;
 import ru.digitalmagicians.ebito.mapper.CommentMapper;
 import ru.digitalmagicians.ebito.repository.CommentRepository;
+import ru.digitalmagicians.ebito.security.AccessChecker;
 import ru.digitalmagicians.ebito.service.AdsService;
 import ru.digitalmagicians.ebito.service.CommentService;
 import ru.digitalmagicians.ebito.service.UserService;
@@ -27,6 +28,7 @@ public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final AdsService adsService;
     private final CommentMapper commentMapper;
+    private final AccessChecker accessChecker;
 
 
     @Override
@@ -59,22 +61,29 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public void deleteComment(Integer adId, Integer commentId) {
         Comment comment = getComment(adId,commentId);
-        commentRepository.delete(comment);
-        log.info("Comment adId:{} commentID:{} removed successfully", adId, commentId);
+        if (accessChecker.checkAccess(comment)) {
+            commentRepository.delete(comment);
+            log.info("Comment adId:{} commentID:{} removed successfully", adId, commentId);
+        } else {
+            throw new PermissionDeniedException();
+        }
     }
 
     @Override
     public CommentDto updateComments(Integer adId, Integer commentId,
                                      CommentDto adsCommentDto) {
-
-        if (adsCommentDto.getText().isBlank())
-            throw new IncorrectArgumentException();
-
         Comment adsComment = getComment(adId, commentId);
-        adsComment.setText(adsCommentDto.getText());
-        commentRepository.save(adsComment);
-        log.info("Comment update successfully adId:{}, commentId:{}", adId, commentId);
-        return commentMapper.commentToDto(adsComment);
+        if (accessChecker.checkAccess(adsComment)) {
+            if (adsCommentDto.getText().isBlank())
+                throw new IncorrectArgumentException();
+
+            adsComment.setText(adsCommentDto.getText());
+            commentRepository.save(adsComment);
+            log.info("Comment update successfully adId:{}, commentId:{}", adId, commentId);
+            return commentMapper.commentToDto(adsComment);
+        } else {
+            throw new PermissionDeniedException();
+        }
 
     }
 

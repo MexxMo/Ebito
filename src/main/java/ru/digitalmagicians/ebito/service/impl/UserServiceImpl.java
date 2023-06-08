@@ -6,12 +6,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.digitalmagicians.ebito.dto.NewPasswordDto;
+import ru.digitalmagicians.ebito.dto.Role;
 import ru.digitalmagicians.ebito.dto.UserDto;
 import ru.digitalmagicians.ebito.entity.Image;
 import ru.digitalmagicians.ebito.entity.User;
+import ru.digitalmagicians.ebito.exception.PermissionDeniedException;
 import ru.digitalmagicians.ebito.exception.UserNotFoundException;
 import ru.digitalmagicians.ebito.mapper.UserMapper;
 import ru.digitalmagicians.ebito.repository.UserRepository;
+import ru.digitalmagicians.ebito.security.AccessChecker;
 import ru.digitalmagicians.ebito.service.ImageService;
 import ru.digitalmagicians.ebito.service.UserService;
 
@@ -24,6 +27,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder encoder;
     private final UserMapper userMapper;
     private final ImageService imageService;
+    private final AccessChecker accessChecker;
 
     @Override
     public void setPassword(NewPasswordDto newPassword, Authentication authentication) {
@@ -52,6 +56,18 @@ public class UserServiceImpl implements UserService {
         user.setPhone(userDto.getPhone());
         userRepository.save(user);
         return userMapper.toDto(user);
+    }
+
+    @Override
+    public UserDto updateRole(Integer id, Role role) {
+        if (accessChecker.checkAccess()) {
+            User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
+            user.setRole(role);
+            userRepository.save(user);
+            return userMapper.toDto(user);
+        } else {
+            throw new PermissionDeniedException();
+        }
     }
 
     @Override

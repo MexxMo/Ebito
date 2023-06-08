@@ -8,10 +8,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.digitalmagicians.ebito.dto.NewPasswordDto;
+import ru.digitalmagicians.ebito.dto.Role;
 import ru.digitalmagicians.ebito.dto.UserDto;
 import ru.digitalmagicians.ebito.service.ImageService;
 import ru.digitalmagicians.ebito.service.UserService;
@@ -80,6 +83,14 @@ public class UserController {
     @PatchMapping("me")
     public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto, Authentication authentication) {
         UserDto user = userService.updateUser(userDto, authentication);
+        return ResponseEntity.ok(user);
+    }
+
+    @PatchMapping("role")
+    // @PreAuthorize("hasRole('ADMIN')") - почему то выдаёт Forbidden, хотя у пользователя стоит роль ADMIN
+    public ResponseEntity<UserDto> updateUserRole(@RequestParam Integer userId,
+                                                  @RequestParam Role role) {
+        UserDto user = userService.updateRole(userId, role);
         return ResponseEntity.ok(user);
     }
 

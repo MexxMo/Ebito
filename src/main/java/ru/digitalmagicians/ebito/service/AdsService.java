@@ -8,6 +8,8 @@ import ru.digitalmagicians.ebito.dto.FullAdsDto;
 import ru.digitalmagicians.ebito.entity.Ads;
 import ru.digitalmagicians.ebito.dto.ResponseWrapperAdsDto;
 
+import javax.naming.NoPermissionException;
+
 
 public interface AdsService {
     AdsDto createAds(MultipartFile image, CreateAdsDto properties, Authentication authentication);
