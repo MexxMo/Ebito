@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -84,8 +85,8 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PatchMapping("role")
-    // @PreAuthorize("hasRole('ADMIN')") - почему то выдаёт Forbidden, хотя у пользователя стоит роль ADMIN
     public ResponseEntity<UserDto> updateUserRole(@RequestParam Integer userId,
                                                   @RequestParam Role role) {
         UserDto user = userService.updateRole(userId, role);
