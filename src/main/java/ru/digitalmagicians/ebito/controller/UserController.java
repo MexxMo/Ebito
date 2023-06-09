@@ -103,10 +103,11 @@ public class UserController {
     )
     @PatchMapping(value = "me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> updateUserImage(@RequestPart("image") MultipartFile image,
-                                                  Authentication authentication){
+                                                  Authentication authentication) {
         userService.updateAvatar(image, authentication);
         return ResponseEntity.ok().build();
     }
+
     @Operation(
             summary = "Получить аватар пользователя",
             responses = {

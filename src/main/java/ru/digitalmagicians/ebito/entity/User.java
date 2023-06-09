@@ -23,7 +23,7 @@ public class User {
     private String email;
     private String password;
     private String phone;
-    @OneToOne (cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "image_avatar")
     private Image image;
     @Enumerated(EnumType.STRING)

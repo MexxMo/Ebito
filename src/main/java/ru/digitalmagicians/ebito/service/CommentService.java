@@ -1,9 +1,8 @@
 package ru.digitalmagicians.ebito.service;
 
-import ru.digitalmagicians.ebito.dto.CommentDto;
 import org.springframework.security.core.Authentication;
+import ru.digitalmagicians.ebito.dto.CommentDto;
 import ru.digitalmagicians.ebito.dto.CreateCommentDto;
-
 
 import java.util.List;
 

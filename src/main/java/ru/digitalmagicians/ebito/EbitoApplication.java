@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class EbitoApplication {
-  public static void main(String[] args) {
-    SpringApplication.run(EbitoApplication.class, args);
-  }
+    public static void main(String[] args) {
+        SpringApplication.run(EbitoApplication.class, args);
+    }
 }
