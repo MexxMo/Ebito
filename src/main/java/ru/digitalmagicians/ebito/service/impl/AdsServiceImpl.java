@@ -13,7 +13,6 @@ import ru.digitalmagicians.ebito.dto.ResponseWrapperAdsDto;
 import ru.digitalmagicians.ebito.entity.Ads;
 import ru.digitalmagicians.ebito.entity.Image;
 import ru.digitalmagicians.ebito.exception.AdsValidationException;
-import ru.digitalmagicians.ebito.exception.PermissionDeniedException;
 import ru.digitalmagicians.ebito.mapper.AdsMapper;
 import ru.digitalmagicians.ebito.repository.AdsRepository;
 import ru.digitalmagicians.ebito.security.AccessChecker;
