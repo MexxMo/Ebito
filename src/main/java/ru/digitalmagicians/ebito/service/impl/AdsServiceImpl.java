@@ -76,7 +76,7 @@ public class AdsServiceImpl implements AdsService {
             log.info("Successful updating ads by id: {}", id);
             return adsMapper.toDto(savedAds);
         } else {
-            throw new PermissionDeniedException();
+            return null;
         }
     }
 
@@ -123,8 +123,6 @@ public class AdsServiceImpl implements AdsService {
         if (accessChecker.checkAccess(ads)) {
             adsRepository.delete(ads);
             log.info("Successful deleting ads by id: {}", id);
-        } else {
-            throw new PermissionDeniedException();
         }
     }
 

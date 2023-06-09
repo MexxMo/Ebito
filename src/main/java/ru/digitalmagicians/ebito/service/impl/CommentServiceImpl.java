@@ -8,7 +8,8 @@ import ru.digitalmagicians.ebito.dto.CommentDto;
 import ru.digitalmagicians.ebito.dto.CreateCommentDto;
 import ru.digitalmagicians.ebito.entity.Comment;
 import ru.digitalmagicians.ebito.entity.User;
-import ru.digitalmagicians.ebito.exception.*;
+import ru.digitalmagicians.ebito.exception.CommentNotFoundException;
+import ru.digitalmagicians.ebito.exception.IncorrectArgumentException;
 import ru.digitalmagicians.ebito.mapper.CommentMapper;
 import ru.digitalmagicians.ebito.repository.CommentRepository;
 import ru.digitalmagicians.ebito.security.AccessChecker;
@@ -60,12 +61,10 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void deleteComment(Integer adId, Integer commentId) {
-        Comment comment = getComment(adId,commentId);
+        Comment comment = getComment(adId, commentId);
         if (accessChecker.checkAccess(comment)) {
             commentRepository.delete(comment);
             log.info("Comment adId:{} commentID:{} removed successfully", adId, commentId);
-        } else {
-            throw new PermissionDeniedException();
         }
     }
 
@@ -74,21 +73,21 @@ public class CommentServiceImpl implements CommentService {
                                      CommentDto adsCommentDto) {
         Comment adsComment = getComment(adId, commentId);
         if (accessChecker.checkAccess(adsComment)) {
-            if (adsCommentDto.getText().isBlank())
+            if (adsCommentDto.getText().isBlank()) {
                 throw new IncorrectArgumentException();
-
+            }
             adsComment.setText(adsCommentDto.getText());
             commentRepository.save(adsComment);
             log.info("Comment update successfully adId:{}, commentId:{}", adId, commentId);
             return commentMapper.commentToDto(adsComment);
         } else {
-            throw new PermissionDeniedException();
+            return null;
         }
 
     }
 
     public Comment getComment(Integer adId, Integer commentId) {
-        return commentRepository.findByIdAndAdsId(commentId,adId).orElseThrow(CommentNotFoundException::new);
+        return commentRepository.findByIdAndAdsId(commentId, adId).orElseThrow(CommentNotFoundException::new);
     }
 
 
