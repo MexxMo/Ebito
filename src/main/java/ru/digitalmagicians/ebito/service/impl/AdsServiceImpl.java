@@ -11,13 +11,13 @@ import ru.digitalmagicians.ebito.dto.CreateAdsDto;
 import ru.digitalmagicians.ebito.dto.FullAdsDto;
 import ru.digitalmagicians.ebito.dto.ResponseWrapperAdsDto;
 import ru.digitalmagicians.ebito.entity.Ads;
-import ru.digitalmagicians.ebito.entity.Image;
+import ru.digitalmagicians.ebito.entity.AdsImage;
 import ru.digitalmagicians.ebito.exception.AdsValidationException;
 import ru.digitalmagicians.ebito.mapper.AdsMapper;
 import ru.digitalmagicians.ebito.repository.AdsRepository;
 import ru.digitalmagicians.ebito.security.AccessChecker;
+import ru.digitalmagicians.ebito.service.AdsImageService;
 import ru.digitalmagicians.ebito.service.AdsService;
-import ru.digitalmagicians.ebito.service.ImageService;
 import ru.digitalmagicians.ebito.service.UserService;
 
 
@@ -33,7 +33,7 @@ public class AdsServiceImpl implements AdsService {
     private final AdsRepository adsRepository;
     private final UserService userService;
     private final AdsMapper adsMapper;
-    private final ImageService imageService;
+    private final AdsImageService adsImageService;
     private final AccessChecker accessChecker;
 
     @Override
@@ -43,12 +43,12 @@ public class AdsServiceImpl implements AdsService {
             throw new AdsValidationException("empty fields createAds");
         }
         Ads ads = new Ads();
-        Image newImage = imageService.saveImage(image);
-        ads.setImage(newImage);
         ads.setTitle(properties.getTitle());
         ads.setDescription(properties.getDescription());
         ads.setPrice(properties.getPrice());
         ads.setAuthor(userService.getUserByEmail(authentication.getName()));
+        AdsImage newImage = adsImageService.saveImageFail(image, ads);
+        ads.setImage(newImage);
         Ads updatedAds = adsRepository.save(ads);
         log.info("Successful save ads");
         return adsMapper.toDto(updatedAds);
@@ -61,9 +61,9 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public AdsDto updateAds(Integer id, CreateAdsDto createAds){
+    public AdsDto updateAds(Integer id, CreateAdsDto createAds) {
         Ads ads = getAdsById(id);
-        if (accessChecker.checkAccess(ads)){
+        if (accessChecker.checkAccess(ads)) {
             if (validation(createAds)) {
                 log.error("empty fields CreateAdsDto updateAds");
                 throw new AdsValidationException("empty fields updateAds");
@@ -82,7 +82,7 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public void updateAdsImage(Integer id, MultipartFile image) {
         Ads ads = adsRepository.findById(id).orElseThrow(() -> new AdsValidationException("Ads not found"));
-        Image updatedImage = imageService.updateImage(image, ads.getImage());
+        AdsImage updatedImage = adsImageService.updateImageFail(image, ads.getImage());
         ads.setImage(updatedImage);
         adsRepository.save(ads);
     }
@@ -120,6 +120,7 @@ public class AdsServiceImpl implements AdsService {
     public void delete(Integer id) {
         Ads ads = getAdsById(id);
         if (accessChecker.checkAccess(ads)) {
+            adsImageService.deleteImageFailPath(ads.getTitle());
             adsRepository.delete(ads);
             log.info("Successful deleting ads by id: {}", id);
         }

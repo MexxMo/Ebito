@@ -16,8 +16,9 @@ import ru.digitalmagicians.ebito.dto.AdsDto;
 import ru.digitalmagicians.ebito.dto.CreateAdsDto;
 import ru.digitalmagicians.ebito.dto.FullAdsDto;
 import ru.digitalmagicians.ebito.dto.ResponseWrapperAdsDto;
+import ru.digitalmagicians.ebito.service.AdsImageService;
 import ru.digitalmagicians.ebito.service.AdsService;
-import ru.digitalmagicians.ebito.service.ImageService;
+
 
 
 @CrossOrigin(value = "http://localhost:3000")
@@ -27,7 +28,7 @@ import ru.digitalmagicians.ebito.service.ImageService;
 @RequiredArgsConstructor
 public class AdsController {
     private final AdsService adsService;
-    private final ImageService imageService;
+    private final AdsImageService imageService;
 
     @Operation(
             summary = "Добавить объявления",
@@ -199,7 +200,7 @@ public class AdsController {
             MediaType.APPLICATION_OCTET_STREAM_VALUE
     })
     public ResponseEntity<byte[]> getImage(@PathVariable("id") String id) {
-        return ResponseEntity.ok(imageService.getImageById(id));
+        return ResponseEntity.ok(imageService.loadImageFail(id));
     }
 
 
