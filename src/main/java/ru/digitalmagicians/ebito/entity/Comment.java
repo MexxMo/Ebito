@@ -1,13 +1,17 @@
 package ru.digitalmagicians.ebito.entity;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "comments")
-@Data
+@NoArgsConstructor
+@EqualsAndHashCode
+@AllArgsConstructor
+@Getter
+@Setter
 public class Comment {
 
     @Id
@@ -17,9 +21,8 @@ public class Comment {
     private Long createdAt;
     @NotNull
     private String text;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     private Ads ads;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     private User author;
-
 }

@@ -6,12 +6,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.digitalmagicians.ebito.dto.NewPasswordDto;
+import ru.digitalmagicians.ebito.dto.Role;
 import ru.digitalmagicians.ebito.dto.UserDto;
+import ru.digitalmagicians.ebito.entity.Image;
 import ru.digitalmagicians.ebito.entity.User;
 import ru.digitalmagicians.ebito.exception.UserNotFoundException;
 import ru.digitalmagicians.ebito.mapper.UserMapper;
 import ru.digitalmagicians.ebito.repository.UserRepository;
+import ru.digitalmagicians.ebito.service.ImageService;
 import ru.digitalmagicians.ebito.service.UserService;
+
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +24,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder encoder;
     private final UserMapper userMapper;
+    private final ImageService imageService;
 
     @Override
     public void setPassword(NewPasswordDto newPassword, Authentication authentication) {
@@ -51,9 +56,27 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateAvatar(MultipartFile image, Authentication authentication) {
-        // todo
+    public UserDto updateRole(Integer id, Role role) {
+        User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
+        user.setRole(role);
+        userRepository.save(user);
+        return userMapper.toDto(user);
     }
+
+    @Override
+    public void updateAvatar(MultipartFile image, Authentication authentication) {
+        User user = getUserByEmail(authentication.getName());
+        Image oldImage = user.getImage();
+        if (oldImage == null) {
+            Image newImage = imageService.saveImage(image);
+            user.setImage(newImage);
+        } else {
+            Image updatedImage = imageService.updateImage(image, oldImage);
+            user.setImage(updatedImage);
+        }
+        userRepository.save(user);
+    }
+
 
     @Override
     public User getUserByEmail(String email) {

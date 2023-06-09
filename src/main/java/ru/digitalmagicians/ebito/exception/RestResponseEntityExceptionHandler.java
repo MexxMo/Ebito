@@ -21,6 +21,7 @@ public class RestResponseEntityExceptionHandler {
                 .badRequest()
                 .body(exception.getMessage());
     }
+
     @ExceptionHandler(AdsValidationException.class)
     public ResponseEntity<String> handleAdsValidationException(AdsValidationException exception) {
         return ResponseEntity
@@ -28,7 +29,7 @@ public class RestResponseEntityExceptionHandler {
                 .body(exception.getMessage());
     }
 
-    @ExceptionHandler({CommentNotFoundException.class, UserNotFoundException.class})
+    @ExceptionHandler({CommentNotFoundException.class, UserNotFoundException.class, ImageNotFoundException.class})
     public ResponseEntity<?> handleNotFoundCommentException() {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
@@ -36,5 +37,10 @@ public class RestResponseEntityExceptionHandler {
     @ExceptionHandler(IncorrectArgumentException.class)
     public ResponseEntity<?> handleIncorrectArgumentException() {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
+
+    @ExceptionHandler(PermissionDeniedException.class)
+    public ResponseEntity<?> handlePermissionDeniedException() {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 }

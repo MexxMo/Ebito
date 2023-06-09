@@ -17,6 +17,7 @@ import ru.digitalmagicians.ebito.dto.CreateAdsDto;
 import ru.digitalmagicians.ebito.dto.FullAdsDto;
 import ru.digitalmagicians.ebito.dto.ResponseWrapperAdsDto;
 import ru.digitalmagicians.ebito.service.AdsService;
+import ru.digitalmagicians.ebito.service.ImageService;
 
 
 @CrossOrigin(value = "http://localhost:3000")
@@ -26,6 +27,7 @@ import ru.digitalmagicians.ebito.service.AdsService;
 @RequiredArgsConstructor
 public class AdsController {
     private final AdsService adsService;
+    private final ImageService imageService;
 
     @Operation(
             summary = "Добавить объявления",
@@ -46,7 +48,7 @@ public class AdsController {
     public ResponseEntity<AdsDto> setAds(@RequestPart("image") MultipartFile image,
                                          @RequestPart("properties") CreateAdsDto properties, Authentication authentication) {
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(adsService.createAds(image, properties,authentication));
+        return ResponseEntity.status(HttpStatus.CREATED).body(adsService.createAds(image, properties, authentication));
     }
 
     @Operation(
@@ -84,7 +86,8 @@ public class AdsController {
             }
     )
     @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> updateAdsImage(@PathVariable("id") Long id, @RequestPart("image") MultipartFile image) {
+    public ResponseEntity<byte[]> updateAdsImage(@PathVariable("id") Integer id, @RequestPart("image") MultipartFile image) {
+        adsService.updateAdsImage(id, image);
         return ResponseEntity.ok().build();
     }
 
@@ -163,5 +166,41 @@ public class AdsController {
         adsService.delete(id);
         return ResponseEntity.ok().build();
     }
+
+    @Operation(
+            summary = "Получить все объявления, удовлетворяющие поиску",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "OK",
+                            content = {
+                                    @Content(
+                                            mediaType = "application/json",
+                                            schema = @Schema(implementation = ResponseWrapperAdsDto.class)
+                                    )
+                            }
+                    )
+            }
+    )
+    @GetMapping("/search/{search}")
+    public ResponseEntity<ResponseWrapperAdsDto> getAds(@PathVariable("search") String search) {
+        return ResponseEntity.ok(adsService.getAll(search));
+    }
+
+    @Operation(
+            summary = "Получить картинку объявления",
+            tags = "Объявления",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "OK"),
+                    @ApiResponse(responseCode = "404", description = "Not found", content = @Content())
+            })
+    @GetMapping(value = "/image/{id}", produces = {
+            MediaType.IMAGE_PNG_VALUE,
+            MediaType.IMAGE_JPEG_VALUE,
+            MediaType.APPLICATION_OCTET_STREAM_VALUE
+    })
+    public ResponseEntity<byte[]> getImage(@PathVariable("id") String id) {
+        return ResponseEntity.ok(imageService.getImageById(id));
+    }
+
 
 }

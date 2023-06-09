@@ -8,12 +8,16 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.digitalmagicians.ebito.dto.NewPasswordDto;
+import ru.digitalmagicians.ebito.dto.Role;
 import ru.digitalmagicians.ebito.dto.UserDto;
+import ru.digitalmagicians.ebito.service.ImageService;
 import ru.digitalmagicians.ebito.service.UserService;
+
 
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
@@ -23,6 +27,7 @@ import ru.digitalmagicians.ebito.service.UserService;
 public class UserController {
 
     private final UserService userService;
+    private final ImageService imageService;
 
     @Operation(
             summary = "Обновление пароля",
@@ -80,6 +85,14 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @PatchMapping("role")
+    public ResponseEntity<UserDto> updateUserRole(@RequestParam Integer userId,
+                                                  @RequestParam Role role) {
+        UserDto user = userService.updateRole(userId, role);
+        return ResponseEntity.ok(user);
+    }
+
     @Operation(
             summary = "Обновить аватар авторизованного пользователя",
             responses = {
@@ -92,6 +105,22 @@ public class UserController {
                                                   Authentication authentication) {
         userService.updateAvatar(image, authentication);
         return ResponseEntity.ok().build();
+    }
+
+    @Operation(
+            summary = "Получить аватар пользователя",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "OK"),
+                    @ApiResponse(responseCode = "404", description = "Not found", content = @Content())
+            })
+    @GetMapping(value = "/image/{id}", produces = {
+            MediaType.IMAGE_PNG_VALUE,
+            MediaType.IMAGE_JPEG_VALUE,
+            MediaType.APPLICATION_OCTET_STREAM_VALUE,
+            MediaType.IMAGE_GIF_VALUE
+    })
+    public ResponseEntity<byte[]> getImage(@PathVariable("id") String id) {
+        return ResponseEntity.ok(imageService.getImageById(id));
     }
 
 }

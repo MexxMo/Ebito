@@ -1,6 +1,5 @@
 package ru.digitalmagicians.ebito.service.impl;
 
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -9,13 +8,14 @@ import ru.digitalmagicians.ebito.dto.CommentDto;
 import ru.digitalmagicians.ebito.dto.CreateCommentDto;
 import ru.digitalmagicians.ebito.entity.Comment;
 import ru.digitalmagicians.ebito.entity.User;
-import ru.digitalmagicians.ebito.exception.*;
+import ru.digitalmagicians.ebito.exception.CommentNotFoundException;
+import ru.digitalmagicians.ebito.exception.IncorrectArgumentException;
 import ru.digitalmagicians.ebito.mapper.CommentMapper;
 import ru.digitalmagicians.ebito.repository.CommentRepository;
+import ru.digitalmagicians.ebito.security.AccessChecker;
 import ru.digitalmagicians.ebito.service.AdsService;
 import ru.digitalmagicians.ebito.service.CommentService;
 import ru.digitalmagicians.ebito.service.UserService;
-
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,6 +29,7 @@ public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final AdsService adsService;
     private final CommentMapper commentMapper;
+    private final AccessChecker accessChecker;
 
 
     @Override
@@ -42,7 +43,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public CommentDto addComment(Integer id, CreateCommentDto createCommentDto, Authentication authentication) {
 
-        if (createCommentDto.getText() == null || createCommentDto.getText().isBlank()) {
+        if (createCommentDto.getText().isBlank()) {
             throw new IncorrectArgumentException();
         }
 
@@ -61,22 +62,27 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public void deleteComment(Integer adId, Integer commentId) {
         Comment comment = getComment(adId, commentId);
-        commentRepository.delete(comment);
-        log.info("Comment removed successfully");
+        if (accessChecker.checkAccess(comment)) {
+            commentRepository.delete(comment);
+            log.info("Comment adId:{} commentID:{} removed successfully", adId, commentId);
+        }
     }
 
     @Override
     public CommentDto updateComments(Integer adId, Integer commentId,
                                      CommentDto adsCommentDto) {
-
-        if (adsCommentDto.getText().isBlank())
-            throw new IncorrectArgumentException();
-
         Comment adsComment = getComment(adId, commentId);
-        adsComment.setText(adsCommentDto.getText());
-        commentRepository.save(adsComment);
-        log.info("Comment update successfully");
-        return commentMapper.commentToDto(adsComment);
+        if (accessChecker.checkAccess(adsComment)) {
+            if (adsCommentDto.getText().isBlank()) {
+                throw new IncorrectArgumentException();
+            }
+            adsComment.setText(adsCommentDto.getText());
+            commentRepository.save(adsComment);
+            log.info("Comment update successfully adId:{}, commentId:{}", adId, commentId);
+            return commentMapper.commentToDto(adsComment);
+        } else {
+            return null;
+        }
 
     }
 
@@ -84,9 +90,5 @@ public class CommentServiceImpl implements CommentService {
         return commentRepository.findByIdAndAdsId(commentId, adId).orElseThrow(CommentNotFoundException::new);
     }
 
-    @Override
-    public Comment getCommentById(Integer id) {
-        return commentRepository.findById(id).orElseThrow(CommentNotFoundException::new);
-    }
 
 }
