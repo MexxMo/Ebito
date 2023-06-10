@@ -14,13 +14,14 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.file.Files;
-
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
-import static java.nio.file.Files.deleteIfExists;
-
+import static java.nio.file.Files.*;
+import static org.apache.catalina.startup.ExpandWar.delete;
 
 @Slf4j
 @Service
@@ -85,8 +86,8 @@ public class AdsImageServiceImpl implements AdsImageService {
     }
 
     @Override
-    public AdsImage updateImageFail(MultipartFile image, AdsImage oldAdsImage) {
-        deleteImageFailPath(oldAdsImage.getNameAds());
+    public AdsImage updateImageFail(MultipartFile image, AdsImage oldAdsImage, Ads ads) {
+        deleteImageFail(ads);
 
         BufferedImage bufferedImage;
         try {
@@ -94,7 +95,7 @@ public class AdsImageServiceImpl implements AdsImageService {
             oldAdsImage.setType(type(image));
             bufferedImage = ImageIO.read(new ByteArrayInputStream(image.getBytes()));
             Files.createDirectories(Paths.get(path(oldAdsImage.getNameAds())));
-            File outputfile = new File(path(oldAdsImage.getNameAds()), oldAdsImage.getId() + "." + type(image));
+            File outputfile = new File(path(ads.getTitle()), oldAdsImage.getId() + "." + type(image));
             ImageIO.write(bufferedImage, type(image), outputfile);
             log.info("File updated successfully");
         } catch (IOException e) {
@@ -103,16 +104,37 @@ public class AdsImageServiceImpl implements AdsImageService {
         return oldAdsImage;
     }
 
+    public void copyImageFail(Ads ads, String title) {
+
+        Path sourcePath = Paths.get(path(ads.getTitle()), ads.getImage().getId() + "." + ads.getImage().getType());
+        Path destinationPath = Paths.get(path(title), ads.getImage().getId() + "." + ads.getImage().getType());
+        try {
+            Files.createDirectories(Paths.get(path(title)));
+            copy(sourcePath, destinationPath);
+            deleteImageFail(ads);
+            log.info("Copy file successfully");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 
     @Override
-    public void deleteImageFailPath(String fileName)  {
-        File  file = new File(PATH, fileName);
+    public void deleteImageFail(Ads ads) {
+
+        Path path = Paths.get(path(ads.getTitle()), ads.getImage().getId() + "." + ads.getImage().getType());
+        File file = new File(PATH, ads.getTitle());
         try {
-            if (deleteIfExists(file.toPath())){
-                log.info("File deleted successfully");
-            }
-            else{
-                log.info("Failed to delete the file");
+            deleteIfExists(path);
+            log.info("File deleted successfully");
+            if (Objects.requireNonNull(file.list()).length == 0) {
+                if (delete(file)) {
+                    log.info("Directory deleted successfully");
+                } else {
+                    log.warn("Directory not deleted");
+                }
+            } else {
+                log.info("File  exists");
             }
         } catch (IOException e) {
             throw new RuntimeException(e);

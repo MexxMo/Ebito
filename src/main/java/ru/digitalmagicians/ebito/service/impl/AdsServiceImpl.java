@@ -68,6 +68,7 @@ public class AdsServiceImpl implements AdsService {
                 log.error("empty fields CreateAdsDto updateAds");
                 throw new AdsValidationException("empty fields updateAds");
             }
+            adsImageService.copyImageFail(ads,createAds.getTitle());
             ads.setTitle(createAds.getTitle());
             ads.setDescription(createAds.getDescription());
             ads.setPrice(createAds.getPrice());
@@ -82,7 +83,7 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public void updateAdsImage(Integer id, MultipartFile image) {
         Ads ads = adsRepository.findById(id).orElseThrow(() -> new AdsValidationException("Ads not found"));
-        AdsImage updatedImage = adsImageService.updateImageFail(image, ads.getImage());
+        AdsImage updatedImage = adsImageService.updateImageFail(image, ads.getImage(), ads);
         ads.setImage(updatedImage);
         adsRepository.save(ads);
     }
@@ -120,7 +121,7 @@ public class AdsServiceImpl implements AdsService {
     public void delete(Integer id) {
         Ads ads = getAdsById(id);
         if (accessChecker.checkAccess(ads)) {
-            adsImageService.deleteImageFailPath(ads.getTitle());
+            adsImageService.deleteImageFail(ads);
             adsRepository.delete(ads);
             log.info("Successful deleting ads by id: {}", id);
         }

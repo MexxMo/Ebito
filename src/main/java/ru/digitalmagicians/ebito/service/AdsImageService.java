@@ -8,8 +8,8 @@ public interface AdsImageService {
     AdsImage saveImageFail(MultipartFile image, Ads ads);
 
     byte[] loadImageFail(String fileName);
+    void copyImageFail( Ads ads,String title);
 
-    AdsImage updateImageFail(MultipartFile image, AdsImage adsImage);
-
-    void deleteImageFailPath(String fileName);
+    AdsImage updateImageFail(MultipartFile image, AdsImage adsImage,Ads ads);
+    void deleteImageFail(Ads ads);
 }
