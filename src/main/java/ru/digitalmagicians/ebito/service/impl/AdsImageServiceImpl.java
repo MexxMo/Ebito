@@ -29,7 +29,15 @@ import static org.apache.catalina.startup.ExpandWar.delete;
 @RequiredArgsConstructor
 public class AdsImageServiceImpl implements AdsImageService {
     private final AdsImageRepository adsImageRepository;
-    static String PATH = System.getProperty("user.dir") + "\\ads\\image";
+    static final String PATH = System.getProperty("user.dir") + "\\ads\\image";
+
+    /**
+     * Сохраняет изображение в фаловой системе
+     *
+     * @param image изображение объявления из фронтеда
+     * @param ads   само объявление
+     * @return изображение из объявления
+     */
 
     @Override
     public AdsImage saveImageFail(MultipartFile image, Ads ads) {
@@ -51,6 +59,14 @@ public class AdsImageServiceImpl implements AdsImageService {
         return adsImage;
     }
 
+    /**
+     * Берет из MultipartFile расширение вида image/png
+     * и удаляет image/
+     *
+     * @param image MultipartFile image из фронтеда
+     * @return расширение файла в виде строки
+     */
+
     private String type(MultipartFile image) {
         String type = image.getContentType();
         assert type != null;
@@ -58,11 +74,23 @@ public class AdsImageServiceImpl implements AdsImageService {
         return type;
     }
 
+    /**
+     * Создаёт путь для фаловой системы
+     *
+     * @param adsName - название объявления
+     * @return путь для фаловой системы
+     */
     private String path(String adsName) {
         return PATH + "\\" + adsName;
     }
 
-    private AdsImage ads(String fileName) {
+    /**
+     * Находит изображение по названию объявления
+     *
+     * @param fileName название изображения
+     * @return изображение по названию объявления
+     */
+    private AdsImage findImageFail(String fileName) {
         Optional<AdsImage> ads = adsImageRepository.findById(fileName);
         if (ads.isEmpty()) {
             throw new RuntimeException("ads.isEmpty()");
@@ -70,9 +98,15 @@ public class AdsImageServiceImpl implements AdsImageService {
         return ads.get();
     }
 
+    /**
+     * Загружает изображение по названию изображения
+     *
+     * @param fileName название изображения
+     * @return изображение в виде byte[]
+     */
     @Override
     public byte[] loadImageFail(String fileName) {
-        AdsImage ads = ads(fileName);
+        AdsImage ads = findImageFail(fileName);
         File image;
         byte[] outputFileBytes;
         try {
@@ -85,6 +119,14 @@ public class AdsImageServiceImpl implements AdsImageService {
         return outputFileBytes;
     }
 
+    /**
+     * Обновляет изображение объявления и удаляет старое изображение
+     *
+     * @param image       изображение объявления из фронтед
+     * @param oldAdsImage старое изображение объявления
+     * @param ads         Объявление
+     * @return обновленное изображение объявления
+     */
     @Override
     public AdsImage updateImageFail(MultipartFile image, AdsImage oldAdsImage, Ads ads) {
         deleteImageFail(ads);
@@ -104,6 +146,13 @@ public class AdsImageServiceImpl implements AdsImageService {
         return oldAdsImage;
     }
 
+    /**
+     * При изменении названия объявления копирует старое изображение в новое значение
+     * и удаляет старое значение
+     *
+     * @param ads   объявление
+     * @param title название объявления
+     */
     public void copyImageFail(Ads ads, String title) {
 
         Path sourcePath = Paths.get(path(ads.getTitle()), ads.getImage().getId() + "." + ads.getImage().getType());
@@ -119,6 +168,12 @@ public class AdsImageServiceImpl implements AdsImageService {
 
     }
 
+    /**
+     * Удаляет изображение объявления и каталог
+     * Если после удаления изображения папка пустая, удаляет каталог
+     *
+     * @param ads объявление
+     */
     @Override
     public void deleteImageFail(Ads ads) {
 
