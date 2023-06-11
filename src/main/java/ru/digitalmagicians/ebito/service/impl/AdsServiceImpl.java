@@ -68,7 +68,9 @@ public class AdsServiceImpl implements AdsService {
                 log.error("empty fields CreateAdsDto updateAds");
                 throw new AdsValidationException("empty fields updateAds");
             }
-            adsImageService.copyImageFail(ads,createAds.getTitle());
+            if (!ads.getTitle().equals(createAds.getTitle())) {
+                adsImageService.copyImageFail(ads, createAds.getTitle());
+            }
             ads.getImage().setNameAds(createAds.getTitle());
             ads.setTitle(createAds.getTitle());
             ads.setDescription(createAds.getDescription());
