@@ -20,7 +20,6 @@ import ru.digitalmagicians.ebito.service.AdsService;
 import ru.digitalmagicians.ebito.service.ImageService;
 import ru.digitalmagicians.ebito.service.UserService;
 
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -54,6 +53,12 @@ public class AdsServiceImpl implements AdsService {
         return adsMapper.toDto(updatedAds);
     }
 
+    /**
+     * Проверяет, являются ли поля объекта CreateAdsDto пустыми или равными null.
+     *
+     * @param properties объект CreateAdsDto для проверки
+     * @return true, если поля пустые или равны null, иначе false
+     */
     private boolean validation(CreateAdsDto properties) {
         return (properties.getTitle().isEmpty()
                 || properties.getDescription().isEmpty()
@@ -61,9 +66,9 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public AdsDto updateAds(Integer id, CreateAdsDto createAds){
+    public AdsDto updateAds(Integer id, CreateAdsDto createAds) {
         Ads ads = getAdsById(id);
-        if (accessChecker.checkAccess(ads)){
+        if (accessChecker.checkAccess(ads)) {
             if (validation(createAds)) {
                 log.error("empty fields CreateAdsDto updateAds");
                 throw new AdsValidationException("empty fields updateAds");
