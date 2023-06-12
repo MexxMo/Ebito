@@ -53,6 +53,12 @@ public class AdsServiceImpl implements AdsService {
         return adsMapper.toDto(updatedAds);
     }
 
+    /**
+     * Проверяет, являются ли поля объекта CreateAdsDto пустыми или равными null.
+     *
+     * @param properties объект CreateAdsDto для проверки
+     * @return true, если поля пустые или равны null, иначе false
+     */
     private boolean validation(CreateAdsDto properties) {
         return (properties.getTitle().isEmpty()
                 || properties.getDescription().isEmpty()
