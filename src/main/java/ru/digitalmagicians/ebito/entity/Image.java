@@ -1,8 +1,7 @@
 package ru.digitalmagicians.ebito.entity;
 
-import lombok.*;
+import lombok.Data;
 import org.hibernate.annotations.Type;
-
 
 import javax.persistence.*;
 

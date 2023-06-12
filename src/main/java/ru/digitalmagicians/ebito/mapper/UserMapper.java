@@ -9,13 +9,14 @@ import ru.digitalmagicians.ebito.entity.User;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
-@Mapping(target = "image", source = "image",qualifiedByName = "imageMapper")
+    @Mapping(target = "image", source = "image", qualifiedByName = "imageMapper")
     UserDto toDto(User user);
+
     @Named("imageMapper")
     default String imageMapper(Image image) {
         if (image == null) {
             return null;
         }
-        return "/users/image/"+image.getId();
+        return "/users/image/" + image.getId();
     }
 }

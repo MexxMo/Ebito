@@ -11,17 +11,18 @@ import ru.digitalmagicians.ebito.entity.Image;
 public interface CommentMapper {
     @Mapping(target = "author", source = "author.id")
     @Mapping(target = "authorFirstName", source = "author.firstName")
-    @Mapping(target = "authorImage", source = "author.image" , qualifiedByName = "imageMapper")
+    @Mapping(target = "authorImage", source = "author.image", qualifiedByName = "imageMapper")
     @Mapping(target = "pk", source = "id")
     @Mapping(target = "createdAt", source = "createdAt")
     @Mapping(target = "text", source = "text")
     CommentDto commentToDto(Comment entity);
+
     @Named("imageMapper")
     default String imageMapper(Image image) {
         if (image == null) {
             return null;
         }
-        return "/users/image/"+image.getId();
+        return "/users/image/" + image.getId();
     }
 }
 

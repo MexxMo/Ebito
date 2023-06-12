@@ -1,36 +1,29 @@
 package ru.digitalmagicians.ebito.security;
 
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import ru.digitalmagicians.ebito.dto.Role;
 import ru.digitalmagicians.ebito.entity.Ads;
 import ru.digitalmagicians.ebito.entity.Comment;
-import ru.digitalmagicians.ebito.entity.User;
 import ru.digitalmagicians.ebito.exception.PermissionDeniedException;
 
 @Service
 public class AccessChecker {
 
-    public boolean checkAccess(Ads ads) {
+    private boolean hasAccess(Integer creatorId) {
         EbitoUserDetails userDetails = (EbitoUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (userDetails.getUser().getRole() != Role.ADMIN && userDetails.getUser().getId() != ads.getAuthor().getId()) {
-            throw new PermissionDeniedException();
-        }
-        return true;
+        return userDetails.getUser().getRole() == Role.ADMIN || userDetails.getUser().getId() == creatorId;
     }
 
     public boolean checkAccess(Comment comment) {
-        EbitoUserDetails userDetails = (EbitoUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (userDetails.getUser().getRole() != Role.ADMIN && userDetails.getUser().getId() != comment.getAuthor().getId()) {
+        if (!hasAccess(comment.getAuthor().getId())) {
             throw new PermissionDeniedException();
         }
         return true;
     }
 
-    public boolean checkAccess() {
-        EbitoUserDetails userDetails = (EbitoUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (userDetails.getUser().getRole() != Role.ADMIN) {
+    public boolean checkAccess(Ads ads) {
+        if (!hasAccess(ads.getAuthor().getId())) {
             throw new PermissionDeniedException();
         }
         return true;

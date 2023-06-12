@@ -1,10 +1,7 @@
 package ru.digitalmagicians.ebito.mapper;
 
 import org.mapstruct.Mapper;
-
-
 import org.mapstruct.Mapping;
-
 import org.mapstruct.Named;
 import ru.digitalmagicians.ebito.dto.AdsDto;
 import ru.digitalmagicians.ebito.dto.FullAdsDto;
@@ -25,6 +22,7 @@ public interface AdsMapper {
     @Mapping(target = "email", source = "author.email")
     @Mapping(target = "pk", source = "id")
     FullAdsDto toFullAds(Ads ads);
+
     @Named("imageMapper")
     default String imageMapper(Image image) {
         if (image == null) {

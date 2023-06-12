@@ -87,7 +87,7 @@ public class AdsController {
     )
     @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<byte[]> updateAdsImage(@PathVariable("id") Integer id, @RequestPart("image") MultipartFile image) {
-        adsService.updateAdsImage(id,image);
+        adsService.updateAdsImage(id, image);
         return ResponseEntity.ok().build();
     }
 
@@ -166,6 +166,7 @@ public class AdsController {
         adsService.delete(id);
         return ResponseEntity.ok().build();
     }
+
     @Operation(
             summary = "Получить все объявления, удовлетворяющие поиску",
             responses = {
@@ -184,14 +185,19 @@ public class AdsController {
     public ResponseEntity<ResponseWrapperAdsDto> getAds(@PathVariable("search") String search) {
         return ResponseEntity.ok(adsService.getAll(search));
     }
-     @Operation(
+
+    @Operation(
             summary = "Получить картинку объявления",
             tags = "Объявления",
             responses = {
                     @ApiResponse(responseCode = "200", description = "OK"),
                     @ApiResponse(responseCode = "404", description = "Not found", content = @Content())
             })
-    @GetMapping(value = "/image/{id}", produces = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @GetMapping(value = "/image/{id}", produces = {
+            MediaType.IMAGE_PNG_VALUE,
+            MediaType.IMAGE_JPEG_VALUE,
+            MediaType.APPLICATION_OCTET_STREAM_VALUE
+    })
     public ResponseEntity<byte[]> getImage(@PathVariable("id") String id) {
         return ResponseEntity.ok(imageService.getImageById(id));
     }

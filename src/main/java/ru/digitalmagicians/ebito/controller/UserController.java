@@ -8,7 +8,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -86,8 +85,8 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PatchMapping("role")
-    // @PreAuthorize("hasRole('ADMIN')") - почему то выдаёт Forbidden, хотя у пользователя стоит роль ADMIN
     public ResponseEntity<UserDto> updateUserRole(@RequestParam Integer userId,
                                                   @RequestParam Role role) {
         UserDto user = userService.updateRole(userId, role);
@@ -103,17 +102,23 @@ public class UserController {
     )
     @PatchMapping(value = "me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> updateUserImage(@RequestPart("image") MultipartFile image,
-                                                  Authentication authentication){
+                                                  Authentication authentication) {
         userService.updateAvatar(image, authentication);
         return ResponseEntity.ok().build();
     }
+
     @Operation(
             summary = "Получить аватар пользователя",
             responses = {
                     @ApiResponse(responseCode = "200", description = "OK"),
                     @ApiResponse(responseCode = "404", description = "Not found", content = @Content())
             })
-    @GetMapping(value = "/image/{id}", produces = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @GetMapping(value = "/image/{id}", produces = {
+            MediaType.IMAGE_PNG_VALUE,
+            MediaType.IMAGE_JPEG_VALUE,
+            MediaType.APPLICATION_OCTET_STREAM_VALUE,
+            MediaType.IMAGE_GIF_VALUE
+    })
     public ResponseEntity<byte[]> getImage(@PathVariable("id") String id) {
         return ResponseEntity.ok(imageService.getImageById(id));
     }
