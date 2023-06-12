@@ -83,6 +83,12 @@ public class UserServiceImpl implements UserService {
         return userRepository.getUserByEmailIgnoreCase(email).orElseThrow(UserNotFoundException::new);
     }
 
+    /**
+     * Проверяет, заполнены ли все поля в объекте UserDto.
+     *
+     * @param dto объект UserDto для проверки
+     * @return true, если все поля заполнены, иначе - false
+     */
     private boolean validateUserDto(UserDto dto) {
         return !dto.getFirstName().isBlank() || !dto.getLastName().isBlank() || !dto.getPhone().isBlank();
     }
