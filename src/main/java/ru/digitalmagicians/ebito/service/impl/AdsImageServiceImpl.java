@@ -41,17 +41,15 @@ public class AdsImageServiceImpl implements AdsImageService {
 
     @Override
     public AdsImage saveImageFail(MultipartFile image, Ads ads) {
-        BufferedImage bufferedImage;
         AdsImage adsImage = new AdsImage();
         try {
             String fileName = UUID.randomUUID().toString();
             adsImage.setId(fileName);
             adsImage.setType(type(image));
             adsImage.setNameAds(ads.getTitle());
-            bufferedImage = ImageIO.read(new ByteArrayInputStream(image.getBytes()));
             Files.createDirectories(Paths.get(path(ads.getTitle())));
-            File outputfile = new File(path(ads.getTitle()), fileName + "." + type(image));
-            ImageIO.write(bufferedImage, type(image), outputfile);
+            Path path = Paths.get(path(ads.getTitle()) +"\\"+ fileName + "." + type(image));
+            Files.write(path, image.getBytes());
             log.info("Image file created by  name: {}", fileName);
         } catch (IOException e) {
             throw new RuntimeException(e);
