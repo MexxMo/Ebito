@@ -16,8 +16,8 @@ import ru.digitalmagicians.ebito.dto.AdsDto;
 import ru.digitalmagicians.ebito.dto.CreateAdsDto;
 import ru.digitalmagicians.ebito.dto.FullAdsDto;
 import ru.digitalmagicians.ebito.dto.ResponseWrapperAdsDto;
-import ru.digitalmagicians.ebito.service.AdsImageService;
 import ru.digitalmagicians.ebito.service.AdsService;
+import ru.digitalmagicians.ebito.service.ImageService;
 
 
 
@@ -28,7 +28,7 @@ import ru.digitalmagicians.ebito.service.AdsService;
 @RequiredArgsConstructor
 public class AdsController {
     private final AdsService adsService;
-    private final AdsImageService imageService;
+    private final ImageService imageService;
 
     @Operation(
             summary = "Добавить объявления",

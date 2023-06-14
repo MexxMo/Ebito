@@ -25,5 +25,5 @@ public class Ads {
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "image_ads")
-    private AdsImage image;
+    private Image image;
 }

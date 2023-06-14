@@ -11,15 +11,14 @@ import ru.digitalmagicians.ebito.dto.CreateAdsDto;
 import ru.digitalmagicians.ebito.dto.FullAdsDto;
 import ru.digitalmagicians.ebito.dto.ResponseWrapperAdsDto;
 import ru.digitalmagicians.ebito.entity.Ads;
-import ru.digitalmagicians.ebito.entity.AdsImage;
+import ru.digitalmagicians.ebito.entity.Image;
 import ru.digitalmagicians.ebito.exception.AdsValidationException;
 import ru.digitalmagicians.ebito.mapper.AdsMapper;
 import ru.digitalmagicians.ebito.repository.AdsRepository;
 import ru.digitalmagicians.ebito.security.AccessChecker;
-import ru.digitalmagicians.ebito.service.AdsImageService;
 import ru.digitalmagicians.ebito.service.AdsService;
+import ru.digitalmagicians.ebito.service.ImageService;
 import ru.digitalmagicians.ebito.service.UserService;
-
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,7 +32,7 @@ public class AdsServiceImpl implements AdsService {
     private final AdsRepository adsRepository;
     private final UserService userService;
     private final AdsMapper adsMapper;
-    private final AdsImageService adsImageService;
+    private final ImageService adsImageService;
     private final AccessChecker accessChecker;
 
     @Override
@@ -47,7 +46,7 @@ public class AdsServiceImpl implements AdsService {
         ads.setDescription(properties.getDescription());
         ads.setPrice(properties.getPrice());
         ads.setAuthor(userService.getUserByEmail(authentication.getName()));
-        AdsImage newImage = adsImageService.saveImageFail(image, ads);
+        Image newImage = adsImageService.saveImageFail(image);
         ads.setImage(newImage);
         Ads updatedAds = adsRepository.save(ads);
         log.info("Successful save ads");
@@ -68,10 +67,6 @@ public class AdsServiceImpl implements AdsService {
                 log.error("empty fields CreateAdsDto updateAds");
                 throw new AdsValidationException("empty fields updateAds");
             }
-            if (!ads.getTitle().equals(createAds.getTitle())) {
-                adsImageService.copyImageFail(ads, createAds.getTitle());
-            }
-            ads.getImage().setNameAds(createAds.getTitle());
             ads.setTitle(createAds.getTitle());
             ads.setDescription(createAds.getDescription());
             ads.setPrice(createAds.getPrice());
@@ -86,7 +81,7 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public void updateAdsImage(Integer id, MultipartFile image) {
         Ads ads = adsRepository.findById(id).orElseThrow(() -> new AdsValidationException("Ads not found"));
-        AdsImage updatedImage = adsImageService.updateImageFail(image, ads.getImage(), ads);
+        Image updatedImage = adsImageService.updateImageFail(image, ads.getImage());
         ads.setImage(updatedImage);
         adsRepository.save(ads);
     }
@@ -124,7 +119,7 @@ public class AdsServiceImpl implements AdsService {
     public void delete(Integer id) {
         Ads ads = getAdsById(id);
         if (accessChecker.checkAccess(ads)) {
-            adsImageService.deleteImageFail(ads);
+            adsImageService.deleteImageFail(ads.getImage());
             adsRepository.delete(ads);
             log.info("Successful deleting ads by id: {}", id);
         }

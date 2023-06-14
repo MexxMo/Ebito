@@ -6,7 +6,7 @@ import org.mapstruct.Named;
 import ru.digitalmagicians.ebito.dto.AdsDto;
 import ru.digitalmagicians.ebito.dto.FullAdsDto;
 import ru.digitalmagicians.ebito.entity.Ads;
-import ru.digitalmagicians.ebito.entity.AdsImage;
+import ru.digitalmagicians.ebito.entity.Image;
 
 
 @Mapper(componentModel = "spring")
@@ -25,7 +25,7 @@ public interface AdsMapper {
     FullAdsDto toFullAds(Ads ads);
 
     @Named("imageMapper")
-    default String imageMapper(AdsImage image) {
+    default String imageMapper(Image image) {
         if (image == null) {
             return null;
         }
