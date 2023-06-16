@@ -45,7 +45,7 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public byte[] loadImageFail(String fileName) {
         File image;
-        byte[] outputFileBytes = new byte[0];
+        byte[] outputFileBytes = null;
         try {
             image = new File(desktopPath, fileName);
             outputFileBytes = readAllBytes(image.toPath());
