@@ -32,8 +32,7 @@ public class ImageServiceImpl implements ImageService {
             String fileName = UUID.randomUUID() + type(image);
             adsImage.setId(fileName);
             createDirectories(Paths.get(desktopPath));
-            Path path = Paths.get(desktopPath + File.separator + fileName);
-            write(path, image.getBytes());
+            image.transferTo(new File(desktopPath + File.separator + fileName));
             log.info("Image file created by  name: {}", fileName);
         } catch (IOException e) {
             log.error("Error while saving image file{}", adsImage.getId());
@@ -76,9 +75,8 @@ public class ImageServiceImpl implements ImageService {
 
         try {
             createDirectories(Paths.get(desktopPath));
-            Path path = Paths.get(desktopPath + File.separator + oldImage.getId());
             deleteImageFail(oldImage);
-            write(path, image.getBytes());
+            image.transferTo(new File(desktopPath + File.separator + oldImage.getId()));
             log.info("File updated successfully");
         } catch (IOException e) {
             log.error("Error while updating file {}", oldImage.getId());
