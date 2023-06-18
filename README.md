@@ -1,4 +1,4 @@
-![](src/main/resources/img/logo.jpg)
+![](src/main/resources/img/logo.png)
 
 # Информация
 

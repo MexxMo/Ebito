@@ -20,6 +20,7 @@ import ru.digitalmagicians.ebito.service.AdsService;
 import ru.digitalmagicians.ebito.service.ImageService;
 
 
+
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequestMapping("/ads")
@@ -199,7 +200,7 @@ public class AdsController {
             MediaType.APPLICATION_OCTET_STREAM_VALUE
     })
     public ResponseEntity<byte[]> getImage(@PathVariable("id") String id) {
-        return ResponseEntity.ok(imageService.getImageById(id));
+        return ResponseEntity.ok(imageService.loadImageFail(id));
     }
 
 

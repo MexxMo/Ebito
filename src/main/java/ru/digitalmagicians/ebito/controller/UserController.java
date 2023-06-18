@@ -120,7 +120,7 @@ public class UserController {
             MediaType.IMAGE_GIF_VALUE
     })
     public ResponseEntity<byte[]> getImage(@PathVariable("id") String id) {
-        return ResponseEntity.ok(imageService.getImageById(id));
+        return ResponseEntity.ok(imageService.loadImageFail(id));
     }
 
 }
