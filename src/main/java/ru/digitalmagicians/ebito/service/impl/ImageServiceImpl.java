@@ -72,16 +72,18 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public Image updateImageFail(MultipartFile image, Image oldImage) {
-
+        Image newImage = new Image();
         try {
+            String fileName = UUID.randomUUID() + type(image);
             createDirectories(Paths.get(desktopPath));
             deleteImageFail(oldImage);
-            image.transferTo(new File(desktopPath + File.separator + oldImage.getId()));
+            image.transferTo(new File(desktopPath + File.separator + fileName));
+            newImage.setId(fileName);
             log.info("File updated successfully");
         } catch (IOException e) {
             log.error("Error while updating file {}", oldImage.getId());
         }
-        return oldImage;
+        return newImage;
     }
 
     @Override
