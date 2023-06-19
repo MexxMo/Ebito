@@ -1,21 +1,21 @@
 package ru.digitalmagicians.ebito.entity;
 
-import lombok.Data;
-import org.hibernate.annotations.Type;
+import lombok.*;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
-
-@Data
 @Entity
-@Table(name = "images")
+@Table(name = "Image")
+@NoArgsConstructor
+@EqualsAndHashCode
+@AllArgsConstructor
+@Getter
+@Setter
 public class Image {
     @Id
     private String id;
 
-    @Lob
-    @Column(name = "image")
-    @Type(type = "binary")
-    private byte[] image;
 
 }
