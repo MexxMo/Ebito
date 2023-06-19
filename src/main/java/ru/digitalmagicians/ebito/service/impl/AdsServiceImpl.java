@@ -15,6 +15,7 @@ import ru.digitalmagicians.ebito.entity.Image;
 import ru.digitalmagicians.ebito.exception.AdsValidationException;
 import ru.digitalmagicians.ebito.mapper.AdsMapper;
 import ru.digitalmagicians.ebito.repository.AdsRepository;
+import ru.digitalmagicians.ebito.repository.CommentRepository;
 import ru.digitalmagicians.ebito.security.AccessChecker;
 import ru.digitalmagicians.ebito.service.AdsService;
 import ru.digitalmagicians.ebito.service.ImageService;
@@ -34,7 +35,7 @@ public class AdsServiceImpl implements AdsService {
     private final AdsMapper adsMapper;
     private final ImageService imageService;
     private final AccessChecker accessChecker;
-
+    private final CommentRepository commentRepository;
     @Override
     public AdsDto createAds(MultipartFile image, CreateAdsDto properties, Authentication authentication) {
         if (validation(properties)) {
@@ -125,6 +126,7 @@ public class AdsServiceImpl implements AdsService {
     public void delete(Integer id) {
         Ads ads = getAdsById(id);
         if (accessChecker.checkAccess(ads)) {
+            commentRepository.deleteAllByAds_Id(ads.getId());
             adsRepository.delete(ads);
             log.info("Successful deleting ads by id: {}", id);
         }
