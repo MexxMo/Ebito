@@ -85,6 +85,14 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
+    @Operation(
+            summary = "Обновить роль пользователя (для администратора)",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "OK"),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized"),
+                    @ApiResponse(responseCode = "403", description = " Forbidden"),
+            }
+    )
     @PreAuthorize("hasAuthority('ADMIN')")
     @PatchMapping("role")
     public ResponseEntity<UserDto> updateUserRole(@RequestParam Integer userId,
