@@ -117,7 +117,7 @@ classDiagram
     }
 
     class Comment {
-        -private Integer id
+        -Integer id
         -Long createdAt
         -String text
         -Ads ads
@@ -219,33 +219,33 @@ classDiagram
         -List<CommentDto> results
     }
 
-Role <|-- GrantedAuthority
-    
-Ads -- User
-Ads -- Image
+    Role <|-- GrantedAuthority
 
-Comment -- Ads
-Comment -- User
+    Ads -- User
+    Ads -- Image
 
-User -- Image
-User -- Ads
-Role o-- User
+    Comment -- Ads
+    Comment -- User
 
-Ads ..|> AdsDto
-Ads --|> FullAdsDto
-Comment ..|> CommentDto
-User ..|> UserDto
-Image ..|> UserDto
-  
-AdsDto -- ResponseWrapperAdsDto
-CommentDto -- ResponseWrapperCommentDto
+    User -- Image
+    User -- Ads
+    Role o-- User
 
-AdsDto -- CreateAdsDto
-FullAdsDto -- AdsDto
-CommentDto -- CreateCommentDto
+    Ads ..|> AdsDto
+    Ads --|> FullAdsDto
+    Comment ..|> CommentDto
+    User ..|> UserDto
+    Image ..|> UserDto
 
-UserDto -- NewPasswordDto
-UserDto -- LoginReq
-UserDto -- RegisterReq
+    AdsDto -- ResponseWrapperAdsDto
+    CommentDto -- ResponseWrapperCommentDto
+
+    AdsDto -- CreateAdsDto
+    FullAdsDto -- AdsDto
+    CommentDto -- CreateCommentDto
+
+    UserDto -- NewPasswordDto
+    UserDto -- LoginReq
+    UserDto -- RegisterReq
 
 ```
