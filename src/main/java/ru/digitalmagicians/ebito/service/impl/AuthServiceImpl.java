@@ -17,7 +17,6 @@ import ru.digitalmagicians.ebito.service.AuthService;
 public class AuthServiceImpl implements AuthService {
 
     private final EbitoUserDetailsService manager;
-
     private final PasswordEncoder encoder;
 
     @Override

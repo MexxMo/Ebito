@@ -1,6 +1,7 @@
 package ru.digitalmagicians.ebito.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,13 +20,17 @@ import ru.digitalmagicians.ebito.service.AuthService;
 @RequiredArgsConstructor
 @Tag(name = "Авторизация")
 public class AuthController {
-
-    private final AuthService authService;
+    private final AuthService service;
 
     @PostMapping("/login")
-    @Operation(summary = "Авторизация пользователя")
+    @Operation(summary = "Авторизация пользователя",
+            tags = "Авторизация",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "OK"),
+                    @ApiResponse(responseCode = "403", description = "Forbidden")
+            })
     public ResponseEntity<?> login(@RequestBody LoginReq req) {
-        if (authService.login(req.getUsername(), req.getPassword())) {
+        if (service.login(req.getUsername(), req.getPassword())) {
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();

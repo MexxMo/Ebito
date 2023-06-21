@@ -29,9 +29,7 @@ import static ru.digitalmagicians.ebito.dto.Role.USER;
         @ApiResponse(responseCode = "200", description = "ОК. Пользователь зарегистрирован",
                 content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                         array = @ArraySchema(schema = @Schema(implementation = RegisterReq.class)))),
-        @ApiResponse(responseCode = "400", description = "Ошибка 400 BAD Request. Параметры запроса некорректны"),
-        @ApiResponse(responseCode = "404", description = "Ошибка 404. Неправильный RegisterReq. Результат NULL"),
-        @ApiResponse(responseCode = "500", description = "Ошибка 500. Внутренняя ошибка программы")
+        @ApiResponse(responseCode = "400", description = "Ошибка 400 BAD Request. Параметры запроса некорректны")
 })
 public class RegisterController {
     private final RegisterService service;
@@ -40,10 +38,8 @@ public class RegisterController {
     @Operation(summary = "Регистрация пользователя")
     public ResponseEntity<?> register(@RequestBody RegisterReq req) {
         Role role = req.getRole() == null ? USER : req.getRole();
-        if (service.register(req, role)) {
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+        return service.register(req, role)
+                ? ResponseEntity.ok().build()
+                : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 }

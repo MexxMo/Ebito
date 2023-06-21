@@ -7,7 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "Image")
+@Table(name = "image")
 @NoArgsConstructor
 @EqualsAndHashCode
 @AllArgsConstructor
