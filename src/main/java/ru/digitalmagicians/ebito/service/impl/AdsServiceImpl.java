@@ -36,6 +36,7 @@ public class AdsServiceImpl implements AdsService {
     private final ImageService imageService;
     private final AccessChecker accessChecker;
     private final CommentRepository commentRepository;
+
     @Override
     public AdsDto createAds(MultipartFile image, CreateAdsDto properties, Authentication authentication) {
         if (validation(properties)) {

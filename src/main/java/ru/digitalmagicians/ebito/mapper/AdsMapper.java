@@ -28,6 +28,6 @@ public interface AdsMapper {
         if (image == null) {
             return null;
         }
-        return "/ads/image/"+image.getId();
+        return "/ads/image/" + image.getId();
     }
 }
