@@ -44,14 +44,13 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public byte[] loadImageFail(String fileName) {
         File image;
-        byte[] outputFileBytes = null;
+        byte[] outputFileBytes;
         try {
             image = new File(desktopPath, fileName);
             outputFileBytes = readAllBytes(image.toPath());
             log.info("File loaded successfully");
         } catch (IOException e) {
-            log.error("Error while loading file {}", fileName);
-
+            return loadDefaultFail();
         }
         return outputFileBytes;
     }
@@ -59,7 +58,7 @@ public class ImageServiceImpl implements ImageService {
     /**
      * Получает тип изображения
      *
-     * @param image изображение из фонтед
+     * @param image изображение из фронтед
      * @return тип данных
      */
     private String type(MultipartFile image) {
@@ -96,5 +95,20 @@ public class ImageServiceImpl implements ImageService {
         } catch (IOException e) {
             log.error("Error while deleting file {}", image.getId());
         }
+    }
+
+    /**
+     * Метод для загрузки изображения по умолчанию.
+     *
+     * @return массив байтов, содержащий данные изображения по умолчанию
+     */
+    private byte[] loadDefaultFail() {
+        byte[] outputFileBytes = null;
+        try {
+            outputFileBytes = readAllBytes(Path.of("src/main/resources/img/default.png"));
+        } catch (IOException e) {
+            log.error("Error while loading default file");
+        }
+        return outputFileBytes;
     }
 }

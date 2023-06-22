@@ -1,96 +1,115 @@
 
 ###
-GET http://localhost:8080/get
+GET http://localhost:8080/ads/1/comments
 Content-Type: application/json
-Authorization: Basic user@gmail.com password
-
-###
-GET http://localhost:8080/ads/asddsfsdf/comment
-Content-Type: application/json
-Authorization: Basic user@gmail.com password
-
-###
-POST http://localhost:8080/login
-Content-Type: application/json
-
-{
-   "username": "user@gmail.com",
-   "password": "password",
-   "firstName":  " asdad",
-   "lastName": " asdad",
-   "phone":  " asdad"
-}
+Authorization: Basic mail@mail.ru 123456789
 
 ###
 POST http://localhost:8080/register
 Content-Type: application/json
 
 {
-  "username": "user12",
-  "password": "password1"
+   "username": "user1222@gmail.com",
+   "password": "password",
+   "firstName":  "asdaddsa",
+   "lastName": "asdadasdasd",
+   "phone":  "+79998887766"
+}
+
+###
+POST http://localhost:8080/login
+Content-Type: application/json
+
+{
+  "username": "mail@mail.ru",
+  "password": "123456789"
 }
 
 ###
 GET http://localhost:8080/ads/me
 Content-Type: application/json
-Authorization: Basic user@gmail.com password
+Authorization: Basic mail@mail.ru 123456789
 
 ###
 GET http://localhost:8080/users/me
 Content-Type: application/json
-Authorization: Basic user@gmail.com password
+Authorization: Basic mail@mail.ru 123456789
 
 ###
 PATCH http://localhost:8080/users/me
 Content-Type: application/json
-Authorization: Basic user@gmail.com password
+Authorization: Basic mail@mail.ru 123456789
 
 {
-  "phone": "33333",
-  "lastName": "Ivanov",
-  "firstName": "Ivan",
-  "email": "user",
-  "id": 1
+  "id": 1,
+  "firstName": "string",
+  "lastName": "string",
+  "email": "string",
+  "phone": "+79998887799",
+  "image": ""
 }
 
 ###
-GET http://localhost:8080/users/1
+GET http://localhost:8080/users/me
 Content-Type: application/json
-Authorization: Basic user@gmail.com password
+Authorization: Basic mail@mail.ru 12345678
 
 ###
 GET http://localhost:8080/ads
 Content-Type: application/json
-Authorization: Basic user@gmail.com password
+Authorization: Basic mail@mail.ru 12345678
 
 
 ###
 POST http://localhost:8080/users/set_password
 Content-Type: application/json
-Authorization: Basic user@gmail.com password
+Authorization: Basic mail@mail.ru 12345678
 
 {
-  "newPassword": "password",
-  "currentPassword": "password1"
+  "currentPassword": 123456789,
+  "newPassword": "123456789"
 }
 
 ###
 POST http://localhost:8080/ads
 Content-Type: application/json
-Authorization: Basic user@gmail.com password
+Authorization: Basic mail@mail.ru 123456789
 
 {
-  "image": "123",
-  "price": 123,
-  "description": "123",
-  "pk": 1233,
-  "title": "123"
+  "description": "string",
+  "price": 0,
+  "title": "string"
 }
 
 ###
 GET http://localhost:8080/ads
 Content-Type: application/json
-Authorization: Basic user@gmail.com password
+Authorization: Basic mail@mail.ru 12345678
+
+###
+PATCH http://localhost:8080/users/role?userId=2&role=ADMIN
+Authorization: Basic mail@mail.ru 12345678
+
+###
+GET http://localhost:8080/ads/search/1
+Authorization: Basic mail@mail.ru 12345678
+Content-Type: application/json
+
+###
+PATCH /users/me/image HTTP/1.1
+Host: localhost:8080
+Authorization: Basic bWFpbEBtYWlsLnJ1OjEyMzQ1Njc4OQ==
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="image"; filename="/D:/Image/_oiwntLGdMw.jpg"
+Content-Type: image/jpeg
+
+(data)
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+
+
 
 
 
