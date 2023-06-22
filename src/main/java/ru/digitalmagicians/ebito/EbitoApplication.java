@@ -9,5 +9,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 public class EbitoApplication {
     public static void main(String[] args) {
         SpringApplication.run(EbitoApplication.class, args);
+        System.out.println("Start Ebito");
     }
 }
