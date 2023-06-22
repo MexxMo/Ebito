@@ -22,92 +22,60 @@ import java.util.List;
 @Tag(name = "Комментарии")
 @RequiredArgsConstructor
 public class CommentController {
-    private final CommentService commentService;
+    private final CommentService service;
 
-    @Operation(
-            summary = "Получить комментарии объявления",
+    @Operation(summary = "Получить комментарии объявления",
             responses = {
-                    @ApiResponse(
-                            responseCode = "200", description = "OK",
-                            content = {
-                                    @Content(
-                                            mediaType = "application/json",
-                                            schema = @Schema(implementation = ResponseWrapperCommentDto.class)
-                                    )
-                            }
-                    ),
-
-                    @ApiResponse(
-                            responseCode = "401", description = "Unauthorized")
-            }
-    )
+                    @ApiResponse(responseCode = "200", description = "OK",
+                            content = {@Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ResponseWrapperCommentDto.class))}),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized")
+            })
     @GetMapping("/{id}/comments")
     public ResponseEntity<ResponseWrapperCommentDto> getComments(@PathVariable("id") Integer id) {
-        List<CommentDto> comments = commentService.getComments(id);
-
+        List<CommentDto> comments = service.getComments(id);
         return ResponseEntity.ok(new ResponseWrapperCommentDto(comments.size(), comments));
     }
 
-    @Operation(
-            summary = "Добавить комментарий к объявлению",
+    @Operation(summary = "Добавить комментарий к объявлению",
             responses = {
                     @ApiResponse(responseCode = "200", description = "OK",
-                            content = {
-                                    @Content(
-                                            mediaType = "application/json",
-                                            schema = @Schema(implementation = CommentDto.class)
-                                    )
-                            }
-                    ),
+                            content = {@Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = CommentDto.class))}),
                     @ApiResponse(responseCode = "401", description = "Unauthorized")
-            }
-    )
+            })
     @PostMapping("/{id}/comments")
     public ResponseEntity<CommentDto> addComment(@PathVariable("id") Integer id,
                                                  @RequestBody CreateCommentDto createCommentDto,
                                                  Authentication authentication) {
-
-
-        return ResponseEntity.ok(commentService.addComment(id, createCommentDto, authentication));
+        return ResponseEntity.ok(service.addComment(id, createCommentDto, authentication));
     }
 
-    @Operation(
-            summary = "Удалить комментарий",
+    @Operation(summary = "Удалить комментарий",
             responses = {
                     @ApiResponse(responseCode = "200", description = "OK"),
                     @ApiResponse(responseCode = "401", description = "Unauthorized"),
                     @ApiResponse(responseCode = "403", description = "Forbidden")
-            }
-    )
+            })
     @DeleteMapping("/{adId}/comments/{commentId}")
     public ResponseEntity<?> deleteComment(@PathVariable("adId") Integer adId,
                                            @PathVariable("commentId") Integer commentId) {
-
-        commentService.deleteComment(adId, commentId);
+        service.deleteComment(adId, commentId);
         return ResponseEntity.ok().build();
     }
 
-    @Operation(
-            summary = "Обновить комментарий",
+    @Operation(summary = "Обновить комментарий",
             responses = {
                     @ApiResponse(responseCode = "200", description = "OK",
-                            content = {
-                                    @Content(
-                                            mediaType = "application/json",
-                                            schema = @Schema(implementation = CommentDto.class)
-                                    )
-                            }
-                    ),
+                            content = {@Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = CommentDto.class))}),
                     @ApiResponse(responseCode = "401", description = "Unauthorized"),
                     @ApiResponse(responseCode = "403", description = "Forbidden")
-            }
-    )
+            })
     @PatchMapping("/{adId}/comments/{commentId}")
     public ResponseEntity<CommentDto> updateComment(@PathVariable("adId") Integer adId,
                                                     @PathVariable("commentId") Integer commentId,
                                                     @RequestBody CommentDto commentDto) {
-
-        return ResponseEntity.ok(commentService.updateComments(adId, commentId, commentDto));
+        return ResponseEntity.ok(service.updateComments(adId, commentId, commentDto));
     }
-
 }

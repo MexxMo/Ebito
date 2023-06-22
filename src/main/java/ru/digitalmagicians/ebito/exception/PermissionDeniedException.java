@@ -1,4 +1,4 @@
 package ru.digitalmagicians.ebito.exception;
 
-public class PermissionDeniedException extends RuntimeException{
+public class PermissionDeniedException extends RuntimeException {
 }

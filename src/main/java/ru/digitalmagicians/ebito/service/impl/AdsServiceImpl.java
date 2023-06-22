@@ -48,7 +48,7 @@ public class AdsServiceImpl implements AdsService {
         ads.setDescription(properties.getDescription());
         ads.setPrice(properties.getPrice());
         ads.setAuthor(userService.getUserByEmail(authentication.getName()));
-        Image newImage = adsImageService.saveImageFail(image);
+        Image newImage = adsImageService.saveImage(image);
         ads.setImage(newImage);
         Ads updatedAds = adsRepository.save(ads);
         log.info("Successful save ads");
@@ -89,7 +89,7 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public void updateAdsImage(Integer id, MultipartFile image) {
         Ads ads = adsRepository.findById(id).orElseThrow(() -> new AdsValidationException("Ads not found"));
-        Image updatedImage = adsImageService.updateImageFail(image, ads.getImage());
+        Image updatedImage = adsImageService.updateImage(image, ads.getImage());
         ads.setImage(updatedImage);
         adsRepository.save(ads);
     }
@@ -127,9 +127,9 @@ public class AdsServiceImpl implements AdsService {
     public void delete(Integer id) {
         Ads ads = getAdsById(id);
         if (accessChecker.checkAccess(ads)) {
-            adsImageService.deleteImageFail(ads.getImage());
+            adsImageService.deleteImage(ads.getImage());
             commentRepository.deleteAllByAds_Id(ads.getId());
-            adsImageService.deleteImageFail(ads.getImage());
+            adsImageService.deleteImage(ads.getImage());
             adsRepository.delete(ads);
             log.info("Successful deleting ads by id: {}", id);
         }

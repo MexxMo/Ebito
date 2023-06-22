@@ -22,13 +22,13 @@ Content-Type: application/json
 
 {
   "username": "mail@mail.ru",
-  "password": "123456789"
+  "password": "12345678"
 }
 
 ###
 GET http://localhost:8080/ads/me
 Content-Type: application/json
-Authorization: Basic mail@mail.ru 123456789
+Authorization: Basic mail@mail.ru 12345678
 
 ###
 GET http://localhost:8080/users/me
@@ -63,17 +63,25 @@ Authorization: Basic mail@mail.ru 12345678
 ###
 POST http://localhost:8080/users/set_password
 Content-Type: application/json
-Authorization: Basic mail@mail.ru 12345678
+Authorization: Basic mail@mail.ru 123456789
+
+{
+  "currentPassword": 12345678,
+  "newPassword": "123456789"
+}
+###
+POST http://localhost:8080/users/set_password
+Content-Type: application/json
+Authorization: Basic mail@mail.ru 123456789
 
 {
   "currentPassword": 123456789,
-  "newPassword": "123456789"
+  "newPassword": "12345678"
 }
-
 ###
 POST http://localhost:8080/ads
 Content-Type: application/json
-Authorization: Basic mail@mail.ru 123456789
+Authorization: Basic mail@mail.ru 12345678
 
 {
   "description": "string",
@@ -87,7 +95,7 @@ Content-Type: application/json
 Authorization: Basic mail@mail.ru 12345678
 
 ###
-PATCH http://localhost:8080/users/role?userId=2&role=ADMIN
+PATCH http://localhost:8080/users/role?userId=10&role=USER
 Authorization: Basic mail@mail.ru 12345678
 
 ###
@@ -98,7 +106,7 @@ Content-Type: application/json
 ###
 PATCH /users/me/image HTTP/1.1
 Host: localhost:8080
-Authorization: Basic bWFpbEBtYWlsLnJ1OjEyMzQ1Njc4OQ==
+Authorization: Basic mail@mail.ru 12345678
 Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
 
 ------WebKitFormBoundary7MA4YWxkTrZu0gW

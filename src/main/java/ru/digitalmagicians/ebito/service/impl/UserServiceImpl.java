@@ -1,6 +1,7 @@
 package ru.digitalmagicians.ebito.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -55,6 +56,7 @@ public class UserServiceImpl implements UserService {
         return userMapper.toDto(user);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @Override
     public UserDto updateRole(Integer id, Role role) {
         User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
@@ -68,10 +70,10 @@ public class UserServiceImpl implements UserService {
         User user = getUserByEmail(authentication.getName());
         Image oldImage = user.getImage();
         if (oldImage == null) {
-            Image newImage = imageService.saveImageFail(image);
+            Image newImage = imageService.saveImage(image);
             user.setImage(newImage);
         } else {
-            Image updatedImage = imageService.updateImageFail(image, oldImage);
+            Image updatedImage = imageService.updateImage(image, oldImage);
             user.setImage(updatedImage);
         }
         userRepository.save(user);
