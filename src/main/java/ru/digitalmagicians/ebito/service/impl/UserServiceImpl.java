@@ -70,10 +70,10 @@ public class UserServiceImpl implements UserService {
         User user = getUserByEmail(authentication.getName());
         Image oldImage = user.getImage();
         if (oldImage == null) {
-            Image newImage = imageService.saveImageFail(image);
+            Image newImage = imageService.saveImage(image);
             user.setImage(newImage);
         } else {
-            Image updatedImage = imageService.updateImageFail(image, oldImage);
+            Image updatedImage = imageService.updateImage(image, oldImage);
             user.setImage(updatedImage);
         }
         userRepository.save(user);

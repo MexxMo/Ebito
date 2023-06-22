@@ -26,23 +26,23 @@ public class ImageServiceImpl implements ImageService {
 
 
     @Override
-    public Image saveImageFail(MultipartFile image) {
-        Image adsImage = new Image();
+    public Image saveImage(MultipartFile image) {
+        Image newImage = new Image();
         try {
             String fileName = UUID.randomUUID() + type(image);
-            adsImage.setId(fileName);
+            newImage.setId(fileName);
             createDirectories(Paths.get(desktopPath));
             image.transferTo(new File(desktopPath + File.separator + fileName));
             log.info("Image file created by  name: {}", fileName);
         } catch (IOException e) {
-            log.error("Error while saving image file{}", adsImage.getId());
+            log.error("Error while saving image file{}", newImage.getId());
         }
-        return adsImage;
+        return newImage;
     }
 
 
     @Override
-    public byte[] loadImageFail(String fileName) {
+    public byte[] loadImage(String fileName) {
         File image;
         byte[] outputFileBytes;
         try {
@@ -50,7 +50,7 @@ public class ImageServiceImpl implements ImageService {
             outputFileBytes = readAllBytes(image.toPath());
             log.info("File loaded successfully");
         } catch (IOException e) {
-            return loadDefaultFail();
+            return loadDefault();
         }
         return outputFileBytes;
     }
@@ -70,12 +70,12 @@ public class ImageServiceImpl implements ImageService {
 
 
     @Override
-    public Image updateImageFail(MultipartFile image, Image oldImage) {
+    public Image updateImage(MultipartFile image, Image oldImage) {
         Image newImage = new Image();
         try {
             String fileName = UUID.randomUUID() + type(image);
             createDirectories(Paths.get(desktopPath));
-            deleteImageFail(oldImage);
+            deleteImage(oldImage);
             image.transferTo(new File(desktopPath + File.separator + fileName));
             newImage.setId(fileName);
             log.info("File updated successfully");
@@ -86,7 +86,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public void deleteImageFail(Image image) {
+    public void deleteImage(Image image) {
 
         Path path = Paths.get(desktopPath + File.separator + image.getId());
         try {
@@ -102,7 +102,7 @@ public class ImageServiceImpl implements ImageService {
      *
      * @return массив байтов, содержащий данные изображения по умолчанию
      */
-    private byte[] loadDefaultFail() {
+    private byte[] loadDefault() {
         byte[] outputFileBytes = null;
         try {
             outputFileBytes = readAllBytes(Path.of("src/main/resources/img/default.png"));

@@ -8,7 +8,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.digitalmagicians.ebito.dto.RegisterReq;
-import ru.digitalmagicians.ebito.dto.Role;
 import ru.digitalmagicians.ebito.entity.User;
 import ru.digitalmagicians.ebito.exception.UserAlreadyExistException;
 import ru.digitalmagicians.ebito.exception.UserNotFoundException;
@@ -38,7 +37,6 @@ public class EbitoUserDetailsService implements UserDetailsService {
         user.setEmail(registerReq.getUsername());
         user.setPassword(encoder.encode(registerReq.getPassword()));
         user.setPhone(registerReq.getPhone());
-//        user.setRole(Role.USER);
         user.setRole(registerReq.getRole());
 
         userRepository.save(user);

@@ -142,8 +142,8 @@ public class AdsController {
             MediaType.APPLICATION_OCTET_STREAM_VALUE
     })
     public ResponseEntity<byte[]> getImage(@PathVariable("id") String id) {
-        return imageService.loadImageFail(id) != null
-                ? ResponseEntity.ok(imageService.loadImageFail(id))
+        return imageService.loadImage(id) != null
+                ? ResponseEntity.ok(imageService.loadImage(id))
                 : ResponseEntity.notFound().build();
     }
 }

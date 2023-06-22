@@ -14,7 +14,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.digitalmagicians.ebito.dto.RegisterReq;
-import ru.digitalmagicians.ebito.dto.Role;
 import ru.digitalmagicians.ebito.service.RegisterService;
 
 import static ru.digitalmagicians.ebito.dto.Role.USER;
@@ -37,8 +36,10 @@ public class RegisterController {
     @PostMapping
     @Operation(summary = "Регистрация пользователя")
     public ResponseEntity<?> register(@RequestBody RegisterReq req) {
-        Role role = req.getRole() == null ? USER : req.getRole();
-        return service.register(req, role)
+        if (req.getRole() == null) {
+            req.setRole(USER);
+        }
+        return service.register(req)
                 ? ResponseEntity.ok().build()
                 : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }

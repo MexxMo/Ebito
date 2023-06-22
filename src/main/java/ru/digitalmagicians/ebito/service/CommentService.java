@@ -41,8 +41,8 @@ public interface CommentService {
     /**
      * Метод для обновления комментария по идентификатору объявления и комментария.
      *
-     * @param adId          идентификатор объявления.
-     * @param commentId     идентификатор комментария.
+     * @param adId       идентификатор объявления.
+     * @param commentId  идентификатор комментария.
      * @param CommentDto данные для обновления комментария.
      * @return обновленный комментарий в формате CommentDto, если обновление прошло успешно, иначе - null.
      * @throws IncorrectArgumentException если текст комментария пустой.

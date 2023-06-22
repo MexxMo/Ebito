@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.digitalmagicians.ebito.dto.RegisterReq;
-import ru.digitalmagicians.ebito.dto.Role;
 import ru.digitalmagicians.ebito.exception.UserAlreadyExistException;
 import ru.digitalmagicians.ebito.security.EbitoUserDetailsService;
 import ru.digitalmagicians.ebito.service.RegisterService;
@@ -18,7 +17,7 @@ public class RegisterServiceImpl implements RegisterService {
     private final EbitoUserDetailsService service;
 
     @Override
-    public boolean register(RegisterReq registerReq, Role role) {
+    public boolean register(RegisterReq registerReq) {
         if (registerReq.getUsername().isBlank() || registerReq.getFirstName().isBlank()
                 || registerReq.getLastName().isBlank() || registerReq.getPhone().isBlank()
                 || registerReq.getPassword().isBlank()) {
