@@ -1,40 +1,36 @@
 package ru.digitalmagicians.ebito.service;
 
-
 import org.springframework.web.multipart.MultipartFile;
 import ru.digitalmagicians.ebito.entity.Image;
-import ru.digitalmagicians.ebito.exception.ImageNotFoundException;
 
-/**
- * Сервис для работы с изображениями.
- */
 public interface ImageService {
-
     /**
-     * Сохраняет новое изображение в базу данных.
+     * Сохраняет изображение в файловой системе
      *
-     * @param image файл изображения
-     * @return сохраненное изображение
+     * @param image изображение объявления из фронтеда
+     * @return изображение из объявления
      */
     Image saveImage(MultipartFile image);
 
     /**
-     * Обновляет существующее изображение в базе данных.
+     * Загружает изображение по названию изображения
      *
-     * @param newImage новый файл изображения
-     * @param oldImage старое изображение
-     * @return обновленное изображение
+     * @param fileName название изображения
+     * @return изображение в виде byte[]
      */
-    Image updateImage(MultipartFile newImage, Image oldImage);
+    byte[] loadImage(String fileName);
 
     /**
-     * Получает изображение по его идентификатору.
+     * Обновляет изображение объявления и удаляет старое изображение
      *
-     * @param id идентификатор изображения
-     * @return файл изображения в виде массива байтов
-     * @throws ImageNotFoundException если изображение не найдено в базе данных
+     * @param image    изображение объявления из фронтед
+     * @param oldImage старое изображение объявления
+     * @return обновленное изображение объявления
      */
-    byte[] getImageById(String id);
+    Image updateImage(MultipartFile image, Image oldImage);
 
+    /**
+     * Удаляет изображение объявления и каталог
+     */
+    void deleteImage(Image image);
 }
-

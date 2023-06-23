@@ -24,6 +24,6 @@ public class Ads {
     private User author;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "image_ads")
+    @JoinColumn(name = "image")
     private Image image;
 }
