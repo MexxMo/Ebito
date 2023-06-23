@@ -27,7 +27,7 @@ public class ImageServiceImpl implements ImageService {
 
     private final String desktopPath = System.getProperty("user.dir") + File.separator + "images";
     @Value("${default.image.url}")
-    private final String url;
+    private String url;
 
 
     @Override
