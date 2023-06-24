@@ -8,7 +8,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.digitalmagicians.ebito.dto.RegisterReq;
-import ru.digitalmagicians.ebito.dto.Role;
 import ru.digitalmagicians.ebito.entity.User;
 import ru.digitalmagicians.ebito.exception.UserAlreadyExistException;
 import ru.digitalmagicians.ebito.exception.UserNotFoundException;
@@ -19,17 +18,17 @@ import ru.digitalmagicians.ebito.repository.UserRepository;
 @RequiredArgsConstructor
 public class EbitoUserDetailsService implements UserDetailsService {
 
-    private final UserRepository userRepository;
+    private final UserRepository repository;
     private final PasswordEncoder encoder;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.getUserByEmailIgnoreCase(username).orElseThrow(UserNotFoundException::new);
+        User user = repository.getUserByEmailIgnoreCase(username).orElseThrow(UserNotFoundException::new);
         return new EbitoUserDetails(user);
     }
 
     public void createUser(RegisterReq registerReq) {
-        if (userRepository.existsByEmailIgnoreCase(registerReq.getUsername())) {
+        if (repository.existsByEmailIgnoreCase(registerReq.getUsername())) {
             throw new UserAlreadyExistException();
         }
         User user = new User();
@@ -41,7 +40,7 @@ public class EbitoUserDetailsService implements UserDetailsService {
 //        user.setRole(Role.USER);
         user.setRole(registerReq.getRole());
 
-        userRepository.save(user);
+        repository.save(user);
         log.debug("User successfully created = {}", user);
     }
 }
