@@ -157,6 +157,4 @@ public class AdsServiceImpl implements AdsService {
                 .collect(Collectors.toList());
         return new ResponseWrapperAdsDto(ads.size(), ads);
     }
-
-
 }

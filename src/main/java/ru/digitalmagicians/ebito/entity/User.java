@@ -8,9 +8,9 @@ import java.util.List;
 
 @Entity
 @Table(name = "users")
+@AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-@AllArgsConstructor
 @Getter
 @Setter
 public class User {
@@ -30,4 +30,13 @@ public class User {
     private Role role;
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
     private List<Ads> ads;
+
+    public User(String firstName, String lastName, String email, String password, String phone, Role role) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.phone = phone;
+        this.role = role;
+    }
 }

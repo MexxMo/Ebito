@@ -98,7 +98,8 @@ public class AdsController {
                             content = {@Content(mediaType = "application/json",
                                     schema = @Schema(implementation = FullAdsDto.class)
                             )}),
-                    @ApiResponse(responseCode = "401", description = "Unauthorized")
+                    @ApiResponse(responseCode = "401", description = "Unauthorized"),
+                    @ApiResponse(responseCode = "404", description = "Not found")
             })
     @GetMapping("/{id}")
     public ResponseEntity<FullAdsDto> getAdsById(@PathVariable("id") Integer id) {

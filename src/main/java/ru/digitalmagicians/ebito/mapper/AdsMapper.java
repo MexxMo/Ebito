@@ -8,7 +8,6 @@ import ru.digitalmagicians.ebito.dto.FullAdsDto;
 import ru.digitalmagicians.ebito.entity.Ads;
 import ru.digitalmagicians.ebito.entity.Image;
 
-
 @Mapper(componentModel = "spring")
 public interface AdsMapper {
     @Mapping(target = "pk", source = "id")

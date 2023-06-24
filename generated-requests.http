@@ -1,98 +1,117 @@
-
 ###
-GET http://localhost:8080/get
+GET http://localhost:8080/ads/1/comments
 Content-Type: application/json
-Authorization: Basic user@gmail.com password
-
-###
-GET http://localhost:8080/ads/asddsfsdf/comment
-Content-Type: application/json
-Authorization: Basic user@gmail.com password
-
-###
-POST http://localhost:8080/login
-Content-Type: application/json
-
-{
-   "username": "user@gmail.com",
-   "password": "password",
-   "firstName":  " asdad",
-   "lastName": " asdad",
-   "phone":  " asdad"
-}
+Authorization: Basic user1@gmail.com 12345678
 
 ###
 POST http://localhost:8080/register
 Content-Type: application/json
 
 {
-  "username": "user12",
-  "password": "password1"
+  "username": "user3@gmail.com",
+  "password": "12345678",
+  "firstName":  "User3",
+  "lastName": "Пользователь",
+  "phone":  "+79998887766"
+}
+
+###
+POST http://localhost:8080/login
+Content-Type: application/json
+
+{
+  "username": "user1@gmail.com",
+  "password": "12345678"
 }
 
 ###
 GET http://localhost:8080/ads/me
 Content-Type: application/json
-Authorization: Basic user@gmail.com password
+Authorization: Basic user1@gmail.com 12345678
 
 ###
 GET http://localhost:8080/users/me
 Content-Type: application/json
-Authorization: Basic user@gmail.com password
+Authorization: Basic user2@gmail.com 12345678
 
 ###
 PATCH http://localhost:8080/users/me
 Content-Type: application/json
-Authorization: Basic user@gmail.com password
+Authorization: Basic user3@gmail.com 12345678
 
 {
-  "phone": "33333",
-  "lastName": "Ivanov",
-  "firstName": "Ivan",
-  "email": "user",
-  "id": 1
+  "id": 10,
+  "firstName": "User.3",
+  "lastName": "User.s",
+  "email": "user.3@gmail.com",
+  "phone": "+79998887799",
+  "image": ""
 }
 
 ###
-GET http://localhost:8080/users/1
+GET http://localhost:8080/users/me
 Content-Type: application/json
-Authorization: Basic user@gmail.com password
+Authorization: Basic user.3@gmail.com 12345678
 
 ###
 GET http://localhost:8080/ads
 Content-Type: application/json
-Authorization: Basic user@gmail.com password
-
+Authorization: Basic user.3@gmail.com 12345678
 
 ###
 POST http://localhost:8080/users/set_password
 Content-Type: application/json
-Authorization: Basic user@gmail.com password
+Authorization: Basic user.3@gmail.com 12345678
 
 {
-  "newPassword": "password",
-  "currentPassword": "password1"
+  "currentPassword": "12345678",
+  "newPassword": "87654321"
+}
+
+###
+POST http://localhost:8080/users/set_password
+Content-Type: application/json
+Authorization: Basic user.3@gmail.com 87654321
+
+{
+  "currentPassword": "87654321",
+  "newPassword": "12345678"
 }
 
 ###
 POST http://localhost:8080/ads
 Content-Type: application/json
-Authorization: Basic user@gmail.com password
+Authorization: Basic user.3@gmail.com 12345678
 
 {
-  "image": "123",
-  "price": 123,
-  "description": "123",
-  "pk": 1233,
-  "title": "123"
+  "description": "Лучший диплом качественно",
+  "price": 250,
+  "title": "Диплом"
 }
 
 ###
 GET http://localhost:8080/ads
 Content-Type: application/json
-Authorization: Basic user@gmail.com password
+Authorization: Basic user.3@gmail.com 12345678
 
+###
+PATCH http://localhost:8080/users/role?userId=10&role=USER
+Authorization: Basic user.3@gmail.com 12345678
 
+###
+GET http://localhost:8080/ads/search/1
+Authorization: Basic user.3@gmail.com 12345678
+Content-Type: application/json
 
+###
+PATCH /users/me/image HTTP/1.1
+Host: localhost:8080
+Authorization: Basic user.3@gmail.com 12345678
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
 
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="image"; filename="/D:/Image/_oiwntLGdMw.jpg"
+Content-Type: image/jpeg
 
+(data)
+------WebKitFormBoundary7MA4YWxkTrZu0gW--

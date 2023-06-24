@@ -42,14 +42,12 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public CommentDto addComment(Integer id, CreateCommentDto createCommentDto, Authentication authentication) {
-
         if (createCommentDto.getText().isBlank()) {
             throw new IncorrectArgumentException();
         }
 
         Comment comment = new Comment();
         User user = userService.getUserByEmail(authentication.getName());
-
         comment.setAuthor(user);
         comment.setAds(adsService.getAdsById(id));
         comment.setCreatedAt(System.currentTimeMillis());
@@ -83,12 +81,9 @@ public class CommentServiceImpl implements CommentService {
         } else {
             return null;
         }
-
     }
 
     public Comment getComment(Integer adId, Integer commentId) {
         return commentRepository.findByIdAndAdsId(commentId, adId).orElseThrow(CommentNotFoundException::new);
     }
-
-
 }
